@@ -1,5 +1,4 @@
 {
-  "deno.importMap": "./import-map.json",
   "editor.formatOnSave": true,
   "editor.rulers": [80],
   "deno.unstable": true,
@@ -16,6 +15,9 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[json]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[jsonc]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   }
 }
