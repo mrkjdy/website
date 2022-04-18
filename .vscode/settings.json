@@ -1,6 +1,8 @@
 {
   "editor.formatOnSave": true,
   "editor.rulers": [80],
+  "editor.tabSize": 2,
+  "files.autoSave": "onWindowChange",
   "deno.unstable": true,
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
