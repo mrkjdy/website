@@ -16,6 +16,8 @@ export const handler = async (req: Request, ctx: HandlerContext) => {
         mimeType === undefined ? undefined : {
           headers: {
             "content-type": mimeType,
+            // Tell browsers that public files can be cached 1 day (in seconds)
+            "cache-control": "public, max-age=86400",
           },
         },
       );
