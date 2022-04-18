@@ -4,6 +4,11 @@ import App from "../islands/App.tsx";
 import { HandlerContext } from "../server_deps.ts";
 import { lookup } from "https://deno.land/x/media_types@v3.0.2/mod.ts";
 
+export enum Environment {
+  PRODUCTION = "PRODUCTION",
+  DEVELOPMENT = "DEVELOPMENT",
+}
+
 export const handler = async (req: Request, ctx: HandlerContext) => {
   const url = new URL(req.url);
   const path = `./public${url.pathname}`;
@@ -11,13 +16,16 @@ export const handler = async (req: Request, ctx: HandlerContext) => {
     const mimeType = lookup(path);
     try {
       const file = await Deno.readFile(path);
+      const isProd = Deno.env.get("ENVIRONMENT") === Environment.PRODUCTION;
       return new Response(
         file,
         mimeType === undefined ? undefined : {
           headers: {
             "content-type": mimeType,
             // Tell browsers that public files can be cached 1 day (in seconds)
-            "cache-control": "public, max-age=86400",
+            "cache-control": isProd
+              ? "max-age=86400, public, must-revalidate"
+              : "max-age=86400, public, no-cache",
           },
         },
       );
