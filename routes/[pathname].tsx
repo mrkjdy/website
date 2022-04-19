@@ -3,11 +3,8 @@ import { h } from "../client_deps.ts";
 import App from "../islands/App.tsx";
 import { HandlerContext } from "../server_deps.ts";
 import { lookup } from "https://deno.land/x/media_types@v3.0.2/mod.ts";
-
-export enum Environment {
-  PRODUCTION = "PRODUCTION",
-  DEVELOPMENT = "DEVELOPMENT",
-}
+import { Environment } from "../islands/environment.ts";
+import { FaviconPath } from "../islands/favicon.ts";
 
 export const handler = async (req: Request, ctx: HandlerContext) => {
   const url = new URL(req.url);
@@ -42,7 +39,7 @@ export const handler = async (req: Request, ctx: HandlerContext) => {
 };
 
 export default () => (
-  <App>
+  <App faviconPath={FaviconPath.NOT_FOUND}>
     <div className="content">
       404
     </div>
