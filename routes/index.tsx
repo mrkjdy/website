@@ -1,15 +1,13 @@
 /** @jsx h */
 import { h } from "../client_deps.ts";
-import App from "../islands/App.tsx";
+import App from "../App.tsx";
 
 export default () => (
   <App>
-    <div className="content">
-      <p>
-        Hi 👋
-      </p>
-      <br />
-      <button>Test</button>
-    </div>
+    {/* <div className="container"> */}
+    <p className="centered">
+      Hi 👋
+    </p>
+    {/* </div> */}
   </App>
 );

@@ -1,33 +1,31 @@
 /** @jsx h */
 import { h } from "../client_deps.ts";
-import App from "../islands/App.tsx";
+import App from "../App.tsx";
 import { HandlerContext } from "../server_deps.ts";
 import { lookup } from "https://deno.land/x/media_types@v3.0.2/mod.ts";
-import { Environment } from "../islands/environment.ts";
-import { FaviconPath } from "../islands/favicon.ts";
+import { Environment } from "../support/environment.ts";
+import { FaviconPath } from "../support/favicon.ts";
+
+const silentReadFile = async (path: string) =>
+  await Deno.readFile(path)
+    .then((file) => file, () => undefined);
 
 export const handler = async (req: Request, ctx: HandlerContext) => {
   const url = new URL(req.url);
   const path = `./public${url.pathname}`;
   if (!path.includes("../")) {
-    const mimeType = lookup(path);
-    try {
-      const file = await Deno.readFile(path);
-      const isProd = Deno.env.get("ENVIRONMENT") === Environment.PRODUCTION;
-      return new Response(
-        file,
-        mimeType === undefined ? undefined : {
-          headers: {
-            "content-type": mimeType,
-            // Tell browsers that public files can be cached 1 day (in seconds)
-            "cache-control": isProd
+    const file = await silentReadFile(path);
+    if (file !== undefined) {
+      const mimeType = lookup(path);
+      return new Response(file, {
+        headers: {
+          ...(mimeType !== undefined && { "content-type": mimeType }),
+          "cache-control":
+            Deno.env.get("ENVIRONMENT") === Environment.PRODUCTION
               ? "max-age=86400, public, must-revalidate"
               : "max-age=86400, public, no-cache",
-          },
         },
-      );
-    } catch {
-      // Throw the file read away if it fails
+      });
     }
   }
   const rendered = ctx.render();
@@ -40,8 +38,10 @@ export const handler = async (req: Request, ctx: HandlerContext) => {
 
 export default () => (
   <App faviconPath={FaviconPath.NOT_FOUND}>
-    <div className="content">
+    {/* <div className="container"> */}
+    <p className="centered">
       404
-    </div>
+    </p>
+    {/* </div> */}
   </App>
 );
