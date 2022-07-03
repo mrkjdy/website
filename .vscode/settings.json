@@ -4,6 +4,7 @@
   "editor.tabSize": 2,
   "files.autoSave": "onWindowChange",
   "deno.unstable": true,
+  "deno.importMap": "./import_map.json",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
