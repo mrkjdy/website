@@ -20,7 +20,8 @@
 
 	// This will install the vscode-deno extension
 	"extensions": [
-		"denoland.vscode-deno"
+		"denoland.vscode-deno",
+		"monokai.theme-monokai-pro-vscode"
 	],
 
 	"remoteUser": "vscode"
