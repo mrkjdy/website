@@ -16,7 +16,7 @@ type AppProps = {
 };
 
 const theme =
-  `h-screen bg-white text-black dark:(bg-gray-800 text-white) font-sans`;
+  `h-screen bg-white text-black dark:(bg-gray-800 text-white) font-sans flex flex-col justify-between`;
 
 export default ({ faviconPath, children }: AppProps) => (
   <>
@@ -51,11 +51,14 @@ export default ({ faviconPath, children }: AppProps) => (
         )}
     </Head>
     <div class={tw`${theme}`}>
-      <div>
+      <div class={tw`h-10`}>
         <a href="/" title="Home">📄 Web server</a>
         <a href="/about" title="About">About</a>
       </div>
-      {children}
+      <div class={tw`mb-auto`}>
+        {children}
+      </div>
+      <div class={tw`h-10`}>© 2022 Mark Judy</div>
     </div>
   </>
 );
