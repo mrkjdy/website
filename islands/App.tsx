@@ -52,8 +52,9 @@ export default ({ faviconPath, children }: AppProps) => (
     </Head>
     <div class={tw`${theme}`}>
       <div class={tw`h-10`}>
-        <a href="/" title="Home">📄 Web server</a>
+        <a href="/" title="Home">Home</a>
         <a href="/about" title="About">About</a>
+        <a href="https://github.com/mrkjdy/webserver" title="Source">Source</a>
       </div>
       <div class={tw`mb-auto`}>
         {children}
