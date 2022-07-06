@@ -8,12 +8,14 @@ const defaultFaviconPath = Deno.env.get("ENVIRONMENT") === "PROD"
   ? "/favicon-prod.svg"
   : "/favicon-dev.svg";
 
+const gaId = Deno.env.get("GA_ID");
+
 type AppProps = {
   faviconPath?: string;
   children: h.JSX.Element;
 };
 
-const containerStyles =
+const theme =
   `h-screen bg-white text-black dark:(bg-gray-800 text-white) font-sans`;
 
 export default ({ faviconPath, children }: AppProps) => (
@@ -31,8 +33,24 @@ export default ({ faviconPath, children }: AppProps) => (
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap"
         rel="stylesheet"
       />
+      {typeof gaId === "string" &&
+        (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/js?id=${gaId}`}
+            >
+            </script>
+            <script>
+              window.dataLayer = window.dataLayer || []; function gtag()
+              &#123;dataLayer.push(arguments);&#125; gtag('js', new Date());
+
+              gtag('config', {`'${gaId}'`});
+            </script>
+          </>
+        )}
     </Head>
-    <div class={tw`${containerStyles}`}>
+    <div class={tw`${theme}`}>
       <div>
         <a href="/" title="Home">📄 Web server</a>
         <a href="/about" title="About">About</a>
