@@ -3,7 +3,7 @@ import { h } from "preact";
 import App from "../islands/App.tsx";
 
 export default () => (
-  <App>
+  <App boldLink="Home">
     <div>Hi 👋</div>
   </App>
 );

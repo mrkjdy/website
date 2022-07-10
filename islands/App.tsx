@@ -1,24 +1,29 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
-import { asset, Head } from "$fresh/runtime.ts";
+import { asset, Head, IS_BROWSER } from "$fresh/runtime.ts";
 import { Fragment, h } from "preact";
 import { tw } from "@twind";
+import Nav, { NavProps } from "./Nav.tsx";
 
-const defaultFaviconPath = Deno.env.get("ENVIRONMENT") === "PROD"
-  ? "/favicon-prod.svg"
-  : "/favicon-dev.svg";
+let defaultFaviconPath = "/favicon-dev.svg";
+let gaId: string | undefined;
+if (!IS_BROWSER) {
+  gaId === Deno.env.get("GA_ID");
+  if (Deno.env.get("ENVIRONMENT") === "PROD") {
+    defaultFaviconPath = "/favicon-prod.svg";
+  }
+}
 
-const gaId = Deno.env.get("GA_ID");
+type AppProps =
+  & {
+    faviconPath?: string;
+    children: h.JSX.Element;
+  }
+  & {
+    [Key in keyof NavProps]: NavProps[Key];
+  };
 
-type AppProps = {
-  faviconPath?: string;
-  children: h.JSX.Element;
-};
-
-const theme =
-  `h-screen bg-white text-black dark:(bg-gray-800 text-white) font-sans flex flex-col justify-between`;
-
-export default ({ faviconPath, children }: AppProps) => (
+export default ({ faviconPath, children, boldLink }: AppProps) => (
   <>
     <Head>
       <title>Web server</title>
@@ -26,12 +31,6 @@ export default ({ faviconPath, children }: AppProps) => (
         rel="icon"
         type="image/x-icon"
         href={asset(faviconPath ?? defaultFaviconPath)}
-      />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap"
-        rel="stylesheet"
       />
       {typeof gaId === "string" &&
         (
@@ -50,16 +49,16 @@ export default ({ faviconPath, children }: AppProps) => (
           </>
         )}
     </Head>
-    <div class={tw`${theme}`}>
-      <div class={tw`h-10`}>
-        <a href="/" title="Home">Home</a>
-        <a href="/about" title="About">About</a>
-        <a href="https://github.com/mrkjdy/webserver" title="Source">Source</a>
-      </div>
-      <div class={tw`mb-auto`}>
+    <Nav boldLink={boldLink} />
+    <div class={tw`flex flex-col items-center`}>
+      <main class={tw`mt-20 flex flex-col items-center`}>
         {children}
-      </div>
-      <div class={tw`h-10`}>© 2022 Mark Judy</div>
+      </main>
+      <footer class={tw`w-full flex flex-row justify-center mt-10 mb-5`}>
+        <p>
+          © 2022 Mark Judy
+        </p>
+      </footer>
     </div>
   </>
 );

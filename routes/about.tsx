@@ -3,7 +3,7 @@ import { h } from "preact";
 import App from "../islands/App.tsx";
 
 export default () => (
-  <App faviconPath="favicon-head.svg">
+  <App faviconPath="favicon-head.svg" boldLink="About">
     <div>
       <p>Hi I'm Mark Judy. Here are some links:</p>
       <ul>
