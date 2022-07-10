@@ -6,12 +6,8 @@ import { tw } from "@twind";
 import Nav, { NavProps } from "./Nav.tsx";
 
 let defaultFaviconPath = "/favicon-dev.svg";
-let gaId: string | undefined;
-if (!IS_BROWSER) {
-  gaId === Deno.env.get("GA_ID");
-  if (Deno.env.get("ENVIRONMENT") === "PROD") {
-    defaultFaviconPath = "/favicon-prod.svg";
-  }
+if (!IS_BROWSER && Deno.env.get("ENVIRONMENT") === "PROD") {
+  defaultFaviconPath = "/favicon-prod.svg";
 }
 
 type AppProps =
@@ -32,22 +28,6 @@ export default ({ faviconPath, children, boldLink }: AppProps) => (
         type="image/x-icon"
         href={asset(faviconPath ?? defaultFaviconPath)}
       />
-      {typeof gaId === "string" &&
-        (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/js?id=${gaId}`}
-            >
-            </script>
-            <script>
-              window.dataLayer = window.dataLayer || []; function gtag()
-              &#123;dataLayer.push(arguments);&#125; gtag('js', new Date());
-
-              gtag('config', {`'${gaId}'`});
-            </script>
-          </>
-        )}
     </Head>
     <Nav boldLink={boldLink} />
     <div class={tw`flex flex-col items-center`}>
