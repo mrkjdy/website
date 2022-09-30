@@ -1,8 +1,9 @@
-import { IS_BROWSER } from "$fresh/runtime.ts";
-import { apply, Configuration, setup } from "twind";
+import { Options } from "$fresh/plugins/twind.ts";
+import { apply } from "twind";
 import * as colors from "twind/colors";
-export * from "twind";
-export const config: Configuration = {
+
+export default {
+  selfURL: import.meta.url,
   mode: "strict",
   theme: {
     extend: {
@@ -20,5 +21,4 @@ export const config: Configuration = {
     body: apply`text-black dark:text-white font-sans bg-white dark:bg-gray-800`,
     footer: apply`text-gray-400`,
   },
-};
-if (IS_BROWSER) setup(config);
+} as Options;

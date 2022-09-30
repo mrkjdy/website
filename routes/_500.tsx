@@ -1,5 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
 import { ErrorPageProps } from "$fresh/server.ts";
 import App from "../islands/App.tsx";
 
