@@ -1,6 +1,7 @@
 import { asset, Head, IS_BROWSER } from "$fresh/runtime.ts";
 import { JSX } from "preact/jsx-runtime";
 import Nav, { NavProps } from "./Nav.tsx";
+import { CSS } from "../utils/markdown.ts";
 
 let defaultFaviconPath = "/favicon-dev.svg";
 if (!IS_BROWSER && Deno.env.get("ENVIRONMENT") === "PROD") {
@@ -25,6 +26,9 @@ export default ({ faviconPath, children, boldLink }: AppProps) => (
         type="image/x-icon"
         href={asset(faviconPath ?? defaultFaviconPath)}
       />
+      <style>
+        {CSS}
+      </style>
     </Head>
     <Nav boldLink={boldLink} />
     <div class="flex flex-col items-center">
