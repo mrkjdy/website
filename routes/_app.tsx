@@ -7,7 +7,7 @@ const defaultFaviconPath = !IS_BROWSER && Deno.env.get("ENVIRONMENT") === "PROD"
   ? "/favicon-prod.svg"
   : "/favicon-dev.svg";
 
-export default (props: AppProps) => (
+export default ({ Component }: AppProps) => (
   <>
     <Head>
       <title>webserver</title>
@@ -20,12 +20,12 @@ export default (props: AppProps) => (
         {CSS}
       </style>
     </Head>
-    <Nav />
-    <div class="flex flex-col items-center">
-      <main class="mt-20 flex flex-col items-center">
-        <props.Component />
+    <div class="flex flex-col items-center relative min-h-screen top-0">
+      <Nav />
+      <main class="flex flex-col items-center mt-20 mb-20">
+        <Component />
       </main>
-      <footer class="w-full flex flex-row justify-center mt-10 mb-5">
+      <footer class="w-full flex flex-row justify-center h-10 absolute bottom-0">
         <p>
           © 2022 Mark Judy
         </p>
