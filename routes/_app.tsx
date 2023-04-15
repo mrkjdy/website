@@ -7,9 +7,29 @@ const defaultFaviconPath = !IS_BROWSER && Deno.env.get("ENVIRONMENT") === "PROD"
   ? "/favicon-prod.svg"
   : "/favicon-dev.svg";
 
+const GA_ID = Deno.env.get("GA_ID");
+
 export default ({ Component }: AppProps) => (
   <>
     <Head>
+      ...{GA_ID !== undefined && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          >
+          </script>
+          <script
+            srcDoc={`
+              window.dataLayer = window.dataLayer || [];
+              function gtag() { dataLayer.push(arguments); }
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}');
+            `}
+          >
+          </script>
+        </>
+      )}
       <title>webserver</title>
       <link
         rel="icon"
