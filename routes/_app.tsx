@@ -3,11 +3,7 @@ import Nav from "../islands/Nav.tsx";
 import { CSS } from "../utils/markdown.ts";
 import { AppProps } from "$fresh/server.ts";
 
-const defaultFaviconPath = !IS_BROWSER && Deno.env.get("ENVIRONMENT") === "PROD"
-  ? "/favicon-prod.svg"
-  : "/favicon-dev.svg";
-
-const GA_ID = Deno.env.get("GA_ID");
+const GA_ID = IS_BROWSER ? undefined : Deno.env.get("GA_ID");
 
 export default ({ Component }: AppProps) => (
   <>
@@ -34,7 +30,7 @@ export default ({ Component }: AppProps) => (
       <link
         rel="icon"
         type="image/x-icon"
-        href={asset(defaultFaviconPath)}
+        href={asset("favicon.svg")}
       />
       <style>
         {CSS}
@@ -47,7 +43,7 @@ export default ({ Component }: AppProps) => (
       </main>
       <footer class="w-full flex flex-row justify-center h-10 absolute bottom-0">
         <p>
-          © 2022 Mark Judy
+          © 2023 Mark Judy
         </p>
       </footer>
     </div>
