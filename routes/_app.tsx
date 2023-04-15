@@ -12,7 +12,7 @@ const GA_ID = Deno.env.get("GA_ID");
 export default ({ Component }: AppProps) => (
   <>
     <Head>
-      ...{GA_ID !== undefined && (
+      {GA_ID !== undefined && (
         <>
           <script
             async
