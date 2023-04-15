@@ -1,21 +1,19 @@
 import { createReporter } from "$ga/mod.ts";
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { MiddlewareHandler } from "$fresh/server.ts";
 
-export interface State {
-  pathname: string;
-}
+const ga = createReporter({ id: Deno.env.get("GA_TRACKING_ID") });
 
-const GA_ID = Deno.env.get("GA_ID");
-
-export const handler = async (
-  req: Request,
-  ctx: MiddlewareHandlerContext<State>,
-): Promise<Response> => {
+export const handler: MiddlewareHandler = async (req, ctx) => {
+  const { next, remoteAddr } = ctx;
   const start = performance.now();
-  const resp = await ctx.next();
-  if (typeof GA_ID === "string") {
-    const ga = createReporter({ id: GA_ID });
-    ga(req, ctx, resp, start);
+  let resp: Response;
+  let err;
+  try {
+    resp = await next();
+  } catch (e) {
+    err = e;
+  } finally {
+    ga(req, { remoteAddr }, resp!, start, err);
   }
-  return resp;
+  return resp!;
 };

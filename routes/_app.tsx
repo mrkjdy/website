@@ -1,31 +1,13 @@
-import { asset, Head, IS_BROWSER } from "$fresh/runtime.ts";
+import { asset, Head } from "$fresh/runtime.ts";
 import Nav from "../islands/Nav.tsx";
 import { CSS } from "../utils/markdown.ts";
 import { AppProps } from "$fresh/server.ts";
-
-const GA_ID = IS_BROWSER ? undefined : Deno.env.get("GA_ID");
+import addGoogleAnalytics from "../utils/add-google-analytics.tsx";
 
 export default ({ Component }: AppProps) => (
   <>
     <Head>
-      {GA_ID !== undefined && (
-        <>
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          >
-          </script>
-          <script
-            srcDoc={`
-              window.dataLayer = window.dataLayer || [];
-              function gtag() { dataLayer.push(arguments); }
-              gtag('js', new Date());
-              gtag('config', '${GA_ID}');
-            `}
-          >
-          </script>
-        </>
-      )}
+      {addGoogleAnalytics()}
       <title>webserver</title>
       <link
         rel="icon"
