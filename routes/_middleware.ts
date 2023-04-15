@@ -1,7 +1,8 @@
 import { createReporter } from "$ga/mod.ts";
 import { MiddlewareHandler } from "$fresh/server.ts";
+import { GA_TRACKING_ID } from "../utils/add-google-analytics.tsx";
 
-const ga = createReporter({ id: Deno.env.get("GA_TRACKING_ID") });
+const ga = createReporter({ id: GA_TRACKING_ID });
 
 export const handler: MiddlewareHandler = async (req, ctx) => {
   const { next, remoteAddr } = ctx;

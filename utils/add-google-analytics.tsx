@@ -1,14 +1,11 @@
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
-export default () => {
-  if (IS_BROWSER) {
-    return undefined;
-  }
-  const GA_TRACKING_ID = Deno.env.get("GA_TRACKING_ID");
-  if (GA_TRACKING_ID === undefined) {
-    return undefined;
-  }
-  return (
+export const GA_TRACKING_ID = IS_BROWSER
+  ? undefined
+  : Deno.env.get("GA_TRACKING_ID");
+
+export default () =>
+  GA_TRACKING_ID === undefined ? undefined : (
     <>
       <script
         async
@@ -26,4 +23,3 @@ export default () => {
       </script>
     </>
   );
-};
