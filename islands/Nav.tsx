@@ -1,3 +1,4 @@
+import { IS_BROWSER } from "https://deno.land/x/fresh@1.1.5/runtime.ts";
 import { tw } from "twind";
 
 const headerLinks = [
@@ -5,12 +6,8 @@ const headerLinks = [
   ["About", "/about"],
 ] as const;
 
-export type NavProps = {
-  boldLink?: (typeof headerLinks)[number][0];
-};
-
-export default ({ boldLink }: NavProps) => (
-  <header class="sticky top-0 w-full border-b-2 border-blue-600 flex flex-row py-2 z-10 bg-white dark:bg-gray-800">
+export default () => (
+  <header class="sticky top-0 w-full flex flex-row py-2 z-10 bg-white dark:bg-gray-800">
     <ul class="align-left space-x-4 flex flex-row pl-5 mr-auto">
       {headerLinks.map(([title, href]) => (
         <li>
@@ -18,7 +15,7 @@ export default ({ boldLink }: NavProps) => (
             href={href}
             title={title}
             class={tw`hover:text-blue-600 ${
-              boldLink === title ? "font-bold" : ""
+              IS_BROWSER && window.location.href === href ? "font-bold" : ""
             }`}
           >
             {title}

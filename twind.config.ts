@@ -4,7 +4,6 @@ import * as colors from "twind/colors";
 
 export default {
   selfURL: import.meta.url,
-  mode: "strict",
   theme: {
     extend: {
       fontFamily: {
@@ -19,6 +18,8 @@ export default {
     "@import":
       `url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap')`,
     body: apply`text-black dark:text-white font-sans bg-white dark:bg-gray-800`,
-    footer: apply`text-gray-400`,
+    "::-webkit-scrollbar": apply`bg-white dark:bg-gray-800 w-3`,
+    "::-webkit-scrollbar-thumb": apply`bg-gray-300 dark:bg-gray-700`,
+    "::-webkit-scrollbar-thumb:hover": apply`bg-gray-400 dark:bg-gray-600`,
   },
-} as Options;
+} satisfies Options;
