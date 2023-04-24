@@ -1,4 +1,4 @@
-import Markdown from "../islands/Markdown.tsx";
+import Markdown from "../components/Markdown.tsx";
 
 const markdown = `
 ## About Me
