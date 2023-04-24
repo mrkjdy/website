@@ -64,7 +64,7 @@ export default () => {
           isHamburgerMenuOpen ? "translate-x-0" : "-translate-x-full"
         } transform transition-transform \
         duration-${hamburgerMenuTransitionDuration} ease-in-out fixed top-10 \
-        left-0 h-screen w-64 bg-gray-800 md:static flex md:hidden z-10`}
+        left-0 h-screen w-64 bg-white dark:bg-gray-800 md:static flex md:hidden z-10`}
       >
         <ul class="md:flex items-center md:space-x-4 py-2 md:py-0 pl-5 space-y-4">
           {headerListItems}
