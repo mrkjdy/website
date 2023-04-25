@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { Bars3Icon, CodeBracketIcon, XMarkIcon } from "@heroicons/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/24/outline";
 
 const headerPairs = [
   ["Home", "/"],
+  ["Blogs", "/blogs"],
   ["About", "/about"],
   ["Source", "https://github.com/mrkjdy/webserver"],
 ] as const;
@@ -84,7 +85,7 @@ export default () => {
         } ${
           isHamburgerMenuOpen ? "opacity-50" : "opacity-0"
         } z-9 fixed top-10 left-0 w-full h-full bg-black transition-opacity \
-        duration-${hamburgerMenuTransitionDuration} ease-in-out`}
+        duration-${hamburgerMenuTransitionDuration} ease-in-out md:hidden`}
       />
     </header>
   );
