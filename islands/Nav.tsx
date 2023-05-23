@@ -48,24 +48,25 @@ export default () => {
   ));
 
   return (
-    <header class="sticky top-0 w-full flex flex-row py-2 z-10 bg-white dark:bg-gray-800">
-      {/* Desktop */}
+    <header class="sticky top-0 w-full flex flex-row py-2 z-10 bg-white dark:bg-[#0d1117]">
       <ul class="align-left space-x-4 flex-row pl-5 mr-auto hidden md:flex">
         {headerListItems}
       </ul>
-      {/* Mobile */}
       <button
         onClick={toggleHamburgerMenu}
         class="text-black dark:text-white h-6 w-6 ml-5 md:hidden"
+        aria-labelledby="hamburgerButton"
       >
-        {isHamburgerMenuOpen ? <XMarkIcon /> : <Bars3Icon />}
+        {isHamburgerMenuOpen
+          ? <XMarkIcon id="hamburgerButton" title="Close Side Nav" />
+          : <Bars3Icon id="hamburgerButton" title="Open Side Nav" />}
       </button>
       <nav
         class={`${
           isHamburgerMenuOpen ? "translate-x-0" : "-translate-x-full"
         } transform transition-transform \
         duration-${hamburgerMenuTransitionDuration} ease-in-out fixed top-10 \
-        left-0 h-screen w-64 bg-white dark:bg-gray-800 md:static flex md:hidden z-10`}
+        left-0 h-screen w-64 bg-white dark:bg-[#0d1117] md:static flex md:hidden z-10`}
       >
         <ul class="md:flex items-center md:space-x-4 py-2 md:py-0 pl-5 space-y-4">
           {headerListItems}

@@ -8,8 +8,11 @@ import * as $1 from "./routes/_500.tsx";
 import * as $2 from "./routes/_app.tsx";
 import * as $3 from "./routes/_middleware.ts";
 import * as $4 from "./routes/about.tsx";
-import * as $5 from "./routes/index.tsx";
-import * as $$0 from "./islands/Nav.tsx";
+import * as $5 from "./routes/blogs/[name].tsx";
+import * as $6 from "./routes/blogs/index.tsx";
+import * as $7 from "./routes/index.tsx";
+import * as $$0 from "./islands/BlogIndexMenu.tsx";
+import * as $$1 from "./islands/Nav.tsx";
 
 const manifest = {
   routes: {
@@ -18,10 +21,13 @@ const manifest = {
     "./routes/_app.tsx": $2,
     "./routes/_middleware.ts": $3,
     "./routes/about.tsx": $4,
-    "./routes/index.tsx": $5,
+    "./routes/blogs/[name].tsx": $5,
+    "./routes/blogs/index.tsx": $6,
+    "./routes/index.tsx": $7,
   },
   islands: {
-    "./islands/Nav.tsx": $$0,
+    "./islands/BlogIndexMenu.tsx": $$0,
+    "./islands/Nav.tsx": $$1,
   },
   baseUrl: import.meta.url,
   config,

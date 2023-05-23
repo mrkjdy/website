@@ -1,15 +1,11 @@
-import Markdown from "../components/Markdown.tsx";
+import Markdown, { customRender } from "../components/Markdown.tsx";
 
-const markdown = `
-## About Me
+const aboutMarkdown = await Deno.readTextFile("./static/about.md");
 
-Hi I'm Mark Judy. Here are some links:
-* https://github.com/mrkjdy
-* https://www.linkedin.com/in/mrkjdy/
-`;
+const aboutHtml = await customRender(aboutMarkdown);
 
 export default () => (
-  <div>
-    <Markdown markdown={markdown} />
+  <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
+    <Markdown html={aboutHtml} />
   </div>
 );

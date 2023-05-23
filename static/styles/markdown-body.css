@@ -1,0 +1,26 @@
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  scroll-margin-top: 2.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.markdown-body ol {
+  list-style: decimal;
+}
+
+.markdown-body ul {
+  list-style: disc;
+}
+
+.markdown-body .octicon-link {
+  fill: var(--color-fg-default);
+}
+
+.markdown-body a {
+  text-decoration: underline;
+}

@@ -1,6 +1,5 @@
 import { asset, Head } from "$fresh/runtime.ts";
 import Nav from "../islands/Nav.tsx";
-import { CSS } from "../utils/markdown.ts";
 import { AppProps } from "$fresh/server.ts";
 import addGoogleAnalytics from "../utils/add-google-analytics.tsx";
 
@@ -12,13 +11,12 @@ export default ({ Component }: AppProps) => (
       <link
         rel="icon"
         type="image/x-icon"
-        href={asset("favicon.svg")}
+        href={asset("/favicon.svg")}
       />
-      <style>{CSS}</style>
     </Head>
     <div class="flex flex-col items-center relative min-h-screen top-0">
       <Nav />
-      <main class="flex flex-col items-center mt-12 mb-20">
+      <main class="flex flex-col items-center mt-10 mb-20 w-full">
         <Component />
       </main>
       <footer class="w-full flex flex-row justify-center h-10 absolute bottom-0 text-gray-400">
