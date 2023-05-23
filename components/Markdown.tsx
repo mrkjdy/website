@@ -21,7 +21,7 @@ type CustomRenderOptions = RenderOptions & {
   assetPrefix?: string | undefined;
 };
 
-export const customRender = async (
+export const customRender = (
   templateMarkdown: string,
   { assetPrefix = "", ...otherRenderOpts }: CustomRenderOptions = {},
 ) => {
@@ -35,12 +35,12 @@ export const customRender = async (
     }
     return asset(`${assetPrefix}${filename}`);
   });
-  const detectedLanguages = findCodeBlockLanguages(markdown);
-  for (const language of detectedLanguages) {
-    await import(
-      `https://esm.sh/prismjs@1.29.0/components/prism-${language}.js?no-check`
-    );
-  }
+  // const detectedLanguages = findCodeBlockLanguages(markdown);
+  // for (const language of detectedLanguages) {
+  //   await import(
+  //     `https://esm.sh/prismjs@1.29.0/components/prism-${language}.js?no-check`
+  //   );
+  // }
   return render(markdown, otherRenderOpts);
 };
 
