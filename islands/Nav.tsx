@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { Bars3Icon, XMarkIcon } from "@heroicons/24/outline";
+import XMarkIcon from "../components/icons/24/XMarkIcon.tsx";
+import Bars3Icon from "../components/icons/24/Bars3Icon.tsx";
 
 const headerPairs = [
   ["Home", "/"],
@@ -54,7 +55,7 @@ export default () => {
       </ul>
       <button
         onClick={toggleHamburgerMenu}
-        class="text-black dark:text-white h-6 w-6 ml-5 md:hidden"
+        class="text-black dark:text-white ml-5 md:hidden"
         aria-labelledby="hamburgerButton"
       >
         {isHamburgerMenuOpen

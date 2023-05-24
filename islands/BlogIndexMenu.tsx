@@ -1,7 +1,7 @@
 import { useRef } from "preact/hooks";
 import Dropdown from "../components/Dropdown.tsx";
 import MultiSelect from "../components/MultiSelect.tsx";
-import { XMarkIcon } from "@heroicons/24/outline";
+import XMarkIcon from "../components/icons/20/XMarkIcon.tsx";
 
 export const SORT_PARAM = "sort";
 
@@ -29,24 +29,25 @@ export default ({ sorts, currentSort, tags }: BlogIndexMenuProps) => {
   const primaryButtonClasses =
     "bg-white dark:bg-[#161B22] rounded-md border border-[#30363d]";
   return (
-    <form ref={formRef} class="flex space-x-4">
+    <form
+      ref={formRef}
+      class="flex space-x-4 items-end"
+      aria-label="Filter and Sort Blogs"
+    >
       {numSelected > 0 && (
-        <div class="flex flex-col justify-end">
-          <button
-            class="rounded-md border border-[#30363d] px-2 py-1 flex space-x-2"
-            type="button"
-            onClick={() => {
-              const url = new URL(window.location.href);
-              url.searchParams.delete(Filter.TAG);
-              window.location.assign(url);
-            }}
-          >
-            <span>Clear</span>
-            <span class="h-6 w-6">
-              <XMarkIcon />
-            </span>
-          </button>
-        </div>
+        <button
+          class="rounded-md border border-[#30363d] px-2 py-1 flex space-x-2 items-center"
+          type="button"
+          onClick={() => {
+            const url = new URL(window.location.href);
+            url.searchParams.delete(Filter.TAG);
+            window.location.assign(url);
+          }}
+          aria-label="Clear Tags"
+        >
+          <span>Clear</span>
+          <XMarkIcon />
+        </button>
       )}
       <MultiSelect
         initialOptions={tags}

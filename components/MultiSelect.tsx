@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { DropdownPosition } from "./Dropdown.tsx";
 import { match } from "../utils/helper.ts";
-import {
-  CheckCircleIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@heroicons/24/outline";
-import CheckCircleEmptyIcon from "./CheckCircleEmptyIcon.tsx";
+import CheckCircleEmptyIcon from "./icons/20/CheckCircleEmptyIcon.tsx";
+import CheckCircleIcon from "./icons/20/CheckCircleIcon.tsx";
+import ChevronDownIcon from "./icons/20/ChevronDownIcon.tsx";
+import ChevronUpIcon from "./icons/20/ChevronUpIcon.tsx";
 
 type OnChangeHandler = (options: [option: string, selected: boolean][]) => void;
 
@@ -144,16 +142,14 @@ export default (
   }, [options]);
 
   return (
-    <div
-      ref={multiSelectRef}
-      onKeyDown={handleKeyDown}
-      class="flex flex-col justify-end"
-    >
+    <div ref={multiSelectRef} onKeyDown={handleKeyDown}>
       <button
         class={`px-2 py-1 flex space-x-2 items-center ${buttonClass}`}
         onClick={toggleDropdown}
         ref={buttonRef}
         type="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
       >
         {numSelected > 0 && (
           <span class="bg-white text-[#0d1117] px-1 rounded-md text-sm">
@@ -161,21 +157,24 @@ export default (
           </span>
         )}
         <span>{buttonText}</span>
-        <span class="h-5 w-5">
-          {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-        </span>
+        <span class="sr-only">Toggle multiselect menu</span>
+        {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
       </button>
       {options.map(([option, selected]) => (
         <input
           type="hidden"
           name={selected ? name : undefined}
           value={option}
+          aria-hidden="true"
         />
       ))}
       {isOpen && (
         <ul
           class={`absolute z-8 ${ddPos.y} ${ddPos.x} ${listClass}`}
           role="listbox"
+          aria-activedescendant={focusIndex >= 0
+            ? `${name}-option-${focusIndex}-${options[focusIndex][0]}`
+            : undefined}
         >
           {options.map(([option, selected], optionIndex) => (
             <li
@@ -189,10 +188,9 @@ export default (
               id={`${name}-option-${optionIndex}-${option}`}
               tabIndex={0}
               ref={optionRefs[optionIndex]}
+              aria-selected={selected}
             >
-              <span class="h-4 w-4">
-                {selected ? <CheckCircleIcon /> : <CheckCircleEmptyIcon />}
-              </span>
+              {selected ? <CheckCircleIcon /> : <CheckCircleEmptyIcon />}
               <span>{option}</span>
             </li>
           ))}

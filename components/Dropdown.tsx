@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@heroicons/24/outline";
+import CheckIcon from "./icons/20/CheckIcon.tsx";
+import ChevronDownIcon from "./icons/20/ChevronDownIcon.tsx";
+import ChevronUpIcon from "./icons/20/ChevronUpIcon.tsx";
 import { match } from "../utils/helper.ts";
 
 export type DropdownPosition = {
@@ -141,26 +139,24 @@ export default <T extends string>(
   }, [selectedOption]);
 
   return (
-    <div
-      ref={dropdownRef}
-      onKeyDown={handleKeyDown}
-      class="flex flex-col justify-end"
-    >
+    <div ref={dropdownRef} onKeyDown={handleKeyDown}>
       <button
         class={`px-2 py-1 flex space-x-2 items-center ${buttonClass}`}
         onClick={toggleDropdown}
         ref={buttonRef}
         type="button"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       >
         <span>{buttonText ?? selectedOption}</span>
-        <span class="h-5 w-5">
-          {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-        </span>
+        <span class="sr-only">Toggle dropdown menu</span>
+        {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
       </button>
       <input
         type="hidden"
         name={name}
         value={selectedOption}
+        aria-hidden="true"
       />
       {isOpen && (
         <ul
@@ -175,17 +171,16 @@ export default <T extends string>(
               key={option}
               onClick={() => handleOptionClick(optionIndex)}
               class={`flex justify-between space-x-2 cursor-pointer px-2 py-2 \
-              items-center hover:${activeListItemClass} ${
+              items-center justify-end hover:${activeListItemClass} ${
                 optionIndex === focusIndex ? activeListItemClass : ""
               } ${setListItemClass(optionIndex)}`}
               role="option"
               id={`${name}-option-${optionIndex}-${option}`}
               tabIndex={0}
               ref={optionRefs[optionIndex]}
+              aria-selected={option === selectedOption}
             >
-              <span class="h-4 w-4">
-                {option === selectedOption && <CheckIcon />}
-              </span>
+              {option === selectedOption && <CheckIcon />}
               <span>{option}</span>
             </li>
           ))}
