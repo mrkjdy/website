@@ -71,7 +71,7 @@ export default (props: MarkdownProps) => {
         data-light-theme="light"
         data-dark-theme="dark"
         class={`markdown-body ${props.class ?? ""}`}
-        style={props.style ?? ""}
+        style={props.style}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </>

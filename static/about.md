@@ -1,10 +1,18 @@
-## About Me
+Hi I'm Mark Judy. I work at IBM. I'm interested in software development and
+computers in general. In my free time I lift 🏋️‍♂️, play ultimate frisbee 🥏, cycle
+🚴‍♂️, and sometimes run 🏃‍♂️! My favorite programming languages are TypeScript,
+Rust, and Golang.
 
-<div class="w-20 h-20">
-  <img src="https://avatars.githubusercontent.com/u/32761859" />
-</div>
+Some of my favorite books include:
 
-Hi I'm Mark Judy. I work at IBM. Here are some links:
+- _Kitchen Confidential Updated Edition: Adventures in the Culinary Underbelly_
+  by Anthony Bourdain
+- _The Man from the Future: The Visionary Life of John von Neumann_ by Ananyo
+  Bhattacharya
+- _The Three-Body Problem_ by Liu Cixin
+- _Dune_ by Frank Herbert
+
+Here are some links:
 
 - https://github.com/mrkjdy
 - https://www.linkedin.com/in/mrkjdy/
