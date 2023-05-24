@@ -1,11 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Blog, blogs } from "../../utils/blogs.ts";
 import { match } from "../../utils/helper.ts";
-import BlogIndexMenu, {
+import BlogIndexForm, {
   Filter,
   Sort,
   SORT_PARAM,
-} from "../../islands/BlogIndexMenu.tsx";
+} from "../../islands/BlogIndexForm.tsx";
 
 const sorts = Object.values(Sort);
 
@@ -99,9 +99,9 @@ export default (
   { data: { blogs, currentSort, tags } }: PageProps<BlogIndexData>,
 ) => (
   <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
-    <div class="flex justify-between">
+    <div class="flex justify-between flex-col space-y-4 sm:space-y-0 sm:flex-row">
       <h1 class="text-4xl font-bold">Blogs</h1>
-      <BlogIndexMenu
+      <BlogIndexForm
         sorts={sorts}
         currentSort={currentSort}
         tags={tags}

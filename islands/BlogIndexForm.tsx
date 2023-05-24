@@ -31,7 +31,7 @@ export default ({ sorts, currentSort, tags }: BlogIndexMenuProps) => {
   return (
     <form
       ref={formRef}
-      class="flex space-x-4 items-end"
+      class="flex space-x-4 items-end self-end"
       aria-label="Filter and Sort Blogs"
     >
       {numSelected > 0 && (
