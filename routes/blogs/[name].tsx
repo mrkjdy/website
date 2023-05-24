@@ -29,21 +29,21 @@ Minutes to read: ${blog.minutesToRead}`;
       <Head>
         <meta name="description" content={metaDescription} />
       </Head>
-      <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
+      <article class="w-full max-w-[min(65ch,calc(100%-2rem))]">
         <h1 class="text-4xl font-bold">{blog.title}</h1>
         <br />
         <img src={asset(blog.coverPhoto)} alt="Cover" />
         <br />
-        <div class="flex space-x-4">
+        <p class="flex space-x-4">
           <span>{blog.formattedDate}</span>
           <span>{`${blog.minutesToRead} minute read`}</span>
           <span>
             <BlogTagLinks tags={blog.tags} />
           </span>
-        </div>
+        </p>
         <br />
         <Markdown html={blog.html} />
-      </div>
+      </article>
     </>
   );
 };

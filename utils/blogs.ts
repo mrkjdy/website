@@ -84,14 +84,14 @@ const createBlog = (
   };
 };
 
-const BLOGS_DIR_PATH = "./blogs/";
+const BLOGS_DIR_PATH = "./static/blogs/";
 
 export const blogs = new Map<string, Blog>();
 
 const extractYaml = createExtractor({ [Format.YAML]: parse as Parser });
 
 for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
-  if (dirEntry.isFile) {
+  if (dirEntry.isFile && dirEntry.name.endsWith(".md")) {
     const fileContents = await Deno.readTextFile(
       `${BLOGS_DIR_PATH}${dirEntry.name}`,
     );
