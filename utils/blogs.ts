@@ -86,7 +86,7 @@ const createBlog = (
 
 const BLOGS_DIR_PATH = "./static/blogs/";
 
-export const blogs = new Map<string, Blog>();
+export const blogMap = new Map<string, Blog>();
 
 const extractYaml = createExtractor({ [Format.YAML]: parse as Parser });
 
@@ -99,6 +99,8 @@ for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
     const { attrs, body: templateMarkdown } = extractYaml(fileContents);
     const blogAttrs = extractBlogAttrs(attrs);
     const blog = createBlog(blogAttrs, templateMarkdown, blogBasename);
-    blogs.set(blogBasename, blog);
+    blogMap.set(blogBasename, blog);
   }
 }
+
+export const blogArray = [...blogMap.values()];

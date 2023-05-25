@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Blog, blogs } from "../../utils/blogs.ts";
+import { Blog, blogArray, blogMap } from "../../utils/blogs.ts";
 import { match } from "../../utils/helper.ts";
 import BlogIndexForm, {
   Filter,
@@ -16,7 +16,6 @@ const isLowerSort = (v: unknown): v is Lowercase<Sort> =>
 
 const DEFAULT_SORT = Sort.NEWEST;
 
-const blogArray = [...blogs.values()];
 const allTags = new Set(blogArray.map(({ tags }) => tags).flat());
 
 type BlogIndexData = {
@@ -24,6 +23,18 @@ type BlogIndexData = {
   currentSort: Sort;
   tags: [tag: string, selected: boolean][];
 };
+
+export const sortBlogs = (blogsToSort: Blog[], sort: Sort): Blog[] =>
+  match(sort, {
+    [Sort.NEWEST]: () =>
+      blogsToSort.sort((blogA, blogB) =>
+        blogB.date.valueOf() - blogA.date.valueOf()
+      ),
+    [Sort.OLDEST]: () =>
+      blogsToSort.sort((blogA, blogB) =>
+        blogA.date.valueOf() - blogB.date.valueOf()
+      ),
+  });
 
 export const handler: Handlers<BlogIndexData> = {
   GET: (req, ctx) => {
@@ -54,16 +65,7 @@ export const handler: Handlers<BlogIndexData> = {
       return Response.redirect(url);
     }
     const correspondingSort = sorts[lowerSorts.indexOf(lowerSort)];
-    const sortedBlogsToShow = match(correspondingSort, {
-      [Sort.NEWEST]: () =>
-        blogsToShow.sort((blogA, blogB) =>
-          blogB.date.valueOf() - blogA.date.valueOf()
-        ),
-      [Sort.OLDEST]: () =>
-        blogsToShow.sort((blogA, blogB) =>
-          blogA.date.valueOf() - blogB.date.valueOf()
-        ),
-    });
+    const sortedBlogsToShow = sortBlogs(blogsToShow, correspondingSort);
     return ctx.render({
       blogs: sortedBlogsToShow,
       currentSort: correspondingSort,

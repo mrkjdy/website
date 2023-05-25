@@ -1,13 +1,13 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { asset, Head } from "$fresh/runtime.ts";
 import Markdown from "../../components/Markdown.tsx";
-import { Blog, blogs } from "../../utils/blogs.ts";
+import { Blog, blogMap } from "../../utils/blogs.ts";
 import { BlogTagLinks } from "./index.tsx";
 
 export const handler: Handlers<Blog> = {
   GET: (_, ctx) => {
     const { name } = ctx.params;
-    const blog = blogs.get(name);
+    const blog = blogMap.get(name);
     if (blog === undefined) {
       return ctx.renderNotFound();
     }
