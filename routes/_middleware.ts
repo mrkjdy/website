@@ -1,6 +1,6 @@
 import { createReporter } from "$ga/mod.ts";
 import { MiddlewareHandler } from "$fresh/server.ts";
-import { GA_TRACKING_ID } from "../utils/add-google-analytics.tsx";
+import { GA_TRACKING_ID } from "../components/GoogleAnalyticsScripts.tsx";
 
 const ga = createReporter({ id: GA_TRACKING_ID });
 
