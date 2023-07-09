@@ -1,6 +1,6 @@
 import { useRef } from "preact/hooks";
-import Dropdown from "../components/Dropdown.tsx";
-import MultiSelect from "../components/MultiSelect.tsx";
+import Dropdown from "../islands/Dropdown.tsx";
+import MultiSelect from "../islands/MultiSelect.tsx";
 import XMarkIcon from "../components/icons/20/XMarkIcon.tsx";
 
 export const SORT_PARAM = "sort";

@@ -8,16 +8,14 @@ const latestThree = sortedBlogs.slice(0, 3);
 
 export default () => (
   <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
-    <div class="text-center">
-      Hi 👋
-      <br />
-      <br />
+    <p class="text-center">Hi 👋</p>
+    <br />
+    <p class="text-left">
       Welcome to my website! I'll probably post blogs here about programming and
       other things like cooking, and anything else that I find interesting. I
-      might even make some interactive content here too!
-      <br />
-      - Mark Judy
-    </div>
+      may even add some interactive content here too!
+    </p>
+    <p class="text-right">- Mark Judy</p>
     <br />
     <h1 class="text-4xl font-bold">Latest Blogs</h1>
     <br />

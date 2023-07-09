@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Blog, blogArray, blogMap } from "../../utils/blogs.ts";
+import { Blog, blogArray } from "../../utils/blogs.ts";
 import { match } from "../../utils/helper.ts";
 import BlogIndexForm, {
   Filter,

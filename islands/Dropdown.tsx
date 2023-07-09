@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { DropdownPosition } from "./Dropdown.tsx";
+import CheckIcon from "../components/icons/20/CheckIcon.tsx";
+import ChevronDownIcon from "../components/icons/20/ChevronDownIcon.tsx";
+import ChevronUpIcon from "../components/icons/20/ChevronUpIcon.tsx";
 import { match } from "../utils/helper.ts";
-import CheckCircleEmptyIcon from "./icons/20/CheckCircleEmptyIcon.tsx";
-import CheckCircleIcon from "./icons/20/CheckCircleIcon.tsx";
-import ChevronDownIcon from "./icons/20/ChevronDownIcon.tsx";
-import ChevronUpIcon from "./icons/20/ChevronUpIcon.tsx";
 
-type OnChangeHandler = (options: [option: string, selected: boolean][]) => void;
+export type DropdownPosition = {
+  y: `top-[${number}px] mt-1` | `bottom-[${number}px] mb-1`;
+  x: `left-[${number}px]` | `right-[${number}px]`;
+};
 
-type MultiSelectProps = {
-  initialOptions: [option: string, selected: boolean][];
-  buttonText: string;
-  onChange?: OnChangeHandler;
+type OnChangeHandler<T extends string> = (selectedOption: T) => void;
+
+type DropdownProps<T extends string> = {
+  options: T[];
+  initialSelected: T;
+  buttonText?: string | undefined;
+  onChange?: OnChangeHandler<T>;
   name: string;
   buttonClass?: string | undefined;
   listClass?: string | undefined;
@@ -19,9 +23,10 @@ type MultiSelectProps = {
   setListItemClass?: ((optionIndex: number) => string) | undefined;
 };
 
-export default (
+export default <T extends string>(
   {
-    initialOptions,
+    options,
+    initialSelected,
     buttonText,
     onChange,
     name,
@@ -29,33 +34,25 @@ export default (
     listClass = "",
     activeListItemClass = "bg-gray-600",
     setListItemClass = () => "",
-  }: MultiSelectProps,
+  }: DropdownProps<T>,
 ) => {
   // State
   const [isOpen, setIsOpen] = useState(false);
-  const [options, setOptions] = useState(initialOptions);
+  const [selectedOption, setSelectedOption] = useState(initialSelected);
   const [focusIndex, setFocusIndex] = useState(-1);
   const [ddPos, setDdPos] = useState<DropdownPosition>({
     y: "bottom-[0px] mb-1",
     x: "left-[0px]",
   });
   // Refs
-  const multiSelectRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const optionRefs = options.map(() => useRef<HTMLLIElement>(null));
-
-  const numSelected = options.reduce(
-    (sum, [_, selected]) => sum + (selected ? 1 : 0),
-    0,
-  );
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleOptionClick = (optionIndex: number) => {
-    setOptions((prevOptions) => {
-      prevOptions[optionIndex][1] = !prevOptions[optionIndex][1];
-      return [...prevOptions];
-    });
+    setSelectedOption(options[optionIndex]);
     setIsOpen(false);
     buttonRef.current?.focus();
   };
@@ -90,7 +87,7 @@ export default (
     });
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (!multiSelectRef.current?.contains(event.target as Node)) {
+    if (!dropdownRef.current?.contains(event.target as Node)) {
       setIsOpen(false);
     }
   };
@@ -137,60 +134,53 @@ export default (
 
   useEffect(() => {
     if (onChange) {
-      onChange(options);
+      onChange(selectedOption);
     }
-  }, [options]);
+  }, [selectedOption]);
 
   return (
-    <div ref={multiSelectRef} onKeyDown={handleKeyDown}>
+    <div ref={dropdownRef} onKeyDown={handleKeyDown}>
       <button
         class={`px-2 py-1 flex space-x-2 items-center ${buttonClass}`}
         onClick={toggleDropdown}
         ref={buttonRef}
         type="button"
-        aria-haspopup="listbox"
+        aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        {numSelected > 0 && (
-          <span class="bg-white text-[#0d1117] px-1 rounded-md text-sm">
-            {numSelected}
-          </span>
-        )}
-        <span>{buttonText}</span>
-        <span class="sr-only">Toggle multiselect menu</span>
+        <span>{buttonText ?? selectedOption}</span>
+        <span class="sr-only">Toggle dropdown menu</span>
         {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
       </button>
-      {options.map(([option, selected]) => (
-        <input
-          type="hidden"
-          name={selected ? name : undefined}
-          value={option}
-          aria-hidden="true"
-        />
-      ))}
+      <input
+        type="hidden"
+        name={name}
+        value={selectedOption}
+        aria-hidden="true"
+      />
       {isOpen && (
         <ul
           class={`absolute z-8 ${ddPos.y} ${ddPos.x} ${listClass}`}
           role="listbox"
-          aria-activedescendant={focusIndex >= 0
-            ? `${name}-option-${focusIndex}-${options[focusIndex][0]}`
-            : undefined}
+          aria-activedescendant={`${name}-option-${focusIndex}-${
+            options[focusIndex]
+          }`}
         >
-          {options.map(([option, selected], optionIndex) => (
+          {options.map((option, optionIndex) => (
             <li
               key={option}
               onClick={() => handleOptionClick(optionIndex)}
               class={`flex justify-between space-x-2 cursor-pointer px-2 py-2 \
-               items-center hover:${activeListItemClass} ${
+              items-center justify-end hover:${activeListItemClass} ${
                 optionIndex === focusIndex ? activeListItemClass : ""
               } ${setListItemClass(optionIndex)}`}
               role="option"
               id={`${name}-option-${optionIndex}-${option}`}
               tabIndex={0}
               ref={optionRefs[optionIndex]}
-              aria-selected={selected}
+              aria-selected={option === selectedOption}
             >
-              {selected ? <CheckCircleIcon /> : <CheckCircleEmptyIcon />}
+              {option === selectedOption && <CheckIcon />}
               <span>{option}</span>
             </li>
           ))}
