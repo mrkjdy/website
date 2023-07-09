@@ -1,12 +1,13 @@
 import { asset, Head } from "$fresh/runtime.ts";
 import Nav from "../islands/Nav.tsx";
 import { AppProps } from "$fresh/server.ts";
-import addGoogleAnalytics from "../utils/add-google-analytics.tsx";
+import GoogleAnalyticsScripts from "../components/GoogleAnalyticsScripts.tsx";
 
 export default ({ Component }: AppProps) => (
   <>
     <Head>
-      {addGoogleAnalytics()}
+      <GoogleAnalyticsScripts />
+      {/* {addGoogleAnalytics()} */}
       <title>webserver</title>
       <link
         rel="icon"
