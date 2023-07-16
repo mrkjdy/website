@@ -50,13 +50,13 @@ export type Blog = Omit<BlogAttrs, "date"> & {
   formattedDate: string;
 };
 
-const createBlog = (
+const createBlog = async (
   blogAttrs: BlogAttrs,
   templateMarkdown: string,
   blogPath: string,
-): Blog => {
+): Promise<Blog> => {
   const href = `/blogs/${blogPath}`;
-  const html = customRender(templateMarkdown, {
+  const html = await customRender(templateMarkdown, {
     assetPrefix: `${href}/`,
   });
   const numberOfWords = html
@@ -98,7 +98,7 @@ for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
     const blogBasename = basename(dirEntry.name, extname(dirEntry.name));
     const { attrs, body: templateMarkdown } = extractYaml(fileContents);
     const blogAttrs = extractBlogAttrs(attrs);
-    const blog = createBlog(blogAttrs, templateMarkdown, blogBasename);
+    const blog = await createBlog(blogAttrs, templateMarkdown, blogBasename);
     blogMap.set(blogBasename, blog);
   }
 }
