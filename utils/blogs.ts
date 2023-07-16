@@ -72,7 +72,7 @@ const createBlog = (
     day: "numeric",
     year: "numeric",
   });
-  const coverPhoto = `${href}/${blogAttrs.coverPhoto}`;
+  const coverPhoto = `/images/${blogPath}/${blogAttrs.coverPhoto}`;
   return {
     ...blogAttrs,
     href,
