@@ -1,28 +1,12 @@
 import { render, RenderOptions } from "../utils/markdown.ts";
 import { asset, Head } from "$fresh/runtime.ts";
 import { CSS } from "../utils/markdown.ts";
-import { match } from "../utils/helper.ts";
-
-const findCodeBlockLanguages = (markdown: string): string[] => {
-  const regex = /```(\w*)/g;
-  let match;
-  const languages = [];
-
-  while ((match = regex.exec(markdown)) !== null) {
-    const [_, language] = match;
-    if (language) {
-      languages.push(language.toLowerCase());
-    }
-  }
-
-  return languages;
-};
 
 type CustomRenderOptions = RenderOptions & {
   assetPrefix?: string | undefined;
 };
 
-export const customRender = async (
+export const customRender = (
   templateMarkdown: string,
   { assetPrefix = "", ...otherRenderOpts }: CustomRenderOptions = {},
 ) => {
@@ -36,22 +20,6 @@ export const customRender = async (
     }
     return asset(`${assetPrefix}${filename}`);
   });
-  const detectedLanguages = findCodeBlockLanguages(markdown);
-  for (const language of detectedLanguages) {
-    await match(language, {
-      "python": () => import("prismjs/components/prism-python.js?no-check"),
-      "rust": () => import("prismjs/components/prism-rust.js?no-check"),
-      "typescript": () =>
-        import("prismjs/components/prism-typescript.js?no-check"),
-      "_": () => {
-        throw new Error(`"${language}" not available`);
-      },
-    });
-    // TODO - Once Deno Deploy supports non-statically analyzable dynamic
-    // imports, remove match above and use dynamic import below.
-    // See https://github.com/denoland/deploy_feedback/issues/1
-    // await import(`prismjs/components/prism-${language}.js?no-check`);
-  }
   return render(markdown, otherRenderOpts);
 };
 
@@ -73,8 +41,7 @@ export default (props: MarkdownProps) => {
   return (
     <>
       <Head>
-        <style>{CSS}</style>
-        <link rel="stylesheet" href={asset("/styles/prism.css")} />
+        <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <link rel="stylesheet" href={asset("/styles/markdown-body.css")} />
       </Head>
       <div
