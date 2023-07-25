@@ -2,7 +2,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { asset, Head } from "$fresh/runtime.ts";
 import Markdown from "../../components/Markdown.tsx";
 import { Blog, blogMap } from "../../utils/blogs.ts";
-import { BlogTagLinks } from "./index.tsx";
+import BlogTagLinks from "../../components/BlogTagLinks.tsx";
 
 export const handler: Handlers<Blog> = {
   GET: (_, ctx) => {

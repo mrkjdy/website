@@ -6,6 +6,7 @@ import BlogIndexForm, {
   Sort,
   SORT_PARAM,
 } from "../../islands/BlogIndexForm.tsx";
+import BlogTagLinks from "../../components/BlogTagLinks.tsx";
 
 const sorts = Object.values(Sort);
 
@@ -75,27 +76,6 @@ export const handler: Handlers<BlogIndexData> = {
     });
   },
 };
-
-type BlogTagLinksProps = {
-  tags: string[];
-};
-
-export const BlogTagLinks = (
-  { tags }: BlogTagLinksProps,
-) => (
-  <>
-    {tags.map((tag, index) => {
-      const params = new URLSearchParams({ [Filter.TAG]: tag });
-      const href = `/blogs?${params.toString()}`;
-      return (
-        <>
-          <a href={href} class="underline">{tag}</a>
-          {index + 1 < tags.length && " · "}
-        </>
-      );
-    })}
-  </>
-);
 
 export default (
   { data: { blogs, currentSort, tags } }: PageProps<BlogIndexData>,
