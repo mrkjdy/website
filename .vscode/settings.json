@@ -22,5 +22,9 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "[markdown]": {
+    "editor.rulers": [72, 80]
+  },
+  "markdown.extension.toc.orderedList": true
 }
