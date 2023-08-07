@@ -20,7 +20,7 @@ export const customRender = (
     }
     return asset(`${assetPrefix}${filename}`);
   });
-  return render(markdown, otherRenderOpts);
+  return [render(markdown, otherRenderOpts), markdown];
 };
 
 type BaseMarkdownProps = {

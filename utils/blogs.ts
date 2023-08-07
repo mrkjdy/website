@@ -48,15 +48,16 @@ export type Blog = Omit<BlogAttrs, "date"> & {
   href: string;
   date: Date;
   formattedDate: string;
+  markdown: string;
 };
 
-const createBlog = async (
+const createBlog = (
   blogAttrs: BlogAttrs,
   templateMarkdown: string,
   blogPath: string,
-): Promise<Blog> => {
+): Blog => {
   const href = `/blogs/${blogPath}`;
-  const html = await customRender(templateMarkdown, {
+  const [html, markdown] = customRender(templateMarkdown, {
     assetPrefix: `${href}/`,
   });
   const numberOfWords = html
@@ -68,7 +69,7 @@ const createBlog = async (
   const minutesToRead = Math.ceil(numberOfWords / wordsPerMinute);
   const date = new Date(blogAttrs.date);
   const formattedDate = date.toLocaleDateString("en-US", {
-    month: "short",
+    month: "long",
     day: "numeric",
     year: "numeric",
   });
@@ -81,6 +82,7 @@ const createBlog = async (
     date, // Overwrite the date with a Date object
     coverPhoto, // Overwrite the relative coverPhoto path
     formattedDate,
+    markdown,
   };
 };
 
@@ -91,14 +93,14 @@ export const blogMap = new Map<string, Blog>();
 const extractYaml = createExtractor({ [Format.YAML]: parse as Parser });
 
 for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
-  if (dirEntry.isFile && dirEntry.name.endsWith(".md")) {
-    const fileContents = await Deno.readTextFile(
-      `${BLOGS_DIR_PATH}${dirEntry.name}`,
-    );
-    const blogBasename = basename(dirEntry.name, extname(dirEntry.name));
+  const { name: filename } = dirEntry;
+  if (dirEntry.isFile && filename.endsWith(".md")) {
+    const blogPath = `${BLOGS_DIR_PATH}${filename}`;
+    const fileContents = await Deno.readTextFile(blogPath);
+    const blogBasename = basename(filename, extname(filename));
     const { attrs, body: templateMarkdown } = extractYaml(fileContents);
     const blogAttrs = extractBlogAttrs(attrs);
-    const blog = await createBlog(blogAttrs, templateMarkdown, blogBasename);
+    const blog = createBlog(blogAttrs, templateMarkdown, blogBasename);
     blogMap.set(blogBasename, blog);
   }
 }

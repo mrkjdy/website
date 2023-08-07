@@ -3,6 +3,7 @@ import { asset, Head } from "$fresh/runtime.ts";
 import Markdown from "../../components/Markdown.tsx";
 import { Blog, blogMap } from "../../utils/blogs.ts";
 import BlogTagLinks from "../../components/BlogTagLinks.tsx";
+import TableOfContents from "../../components/TableOfContents.tsx";
 
 export const handler: Handlers<Blog> = {
   GET: (_, ctx) => {
@@ -41,6 +42,8 @@ Minutes to read: ${blog.minutesToRead}`;
             <BlogTagLinks tags={blog.tags} />
           </span>
         </p>
+        <br />
+        <TableOfContents markdown={blog.markdown} />
         <br />
         <Markdown html={blog.html} />
       </article>
