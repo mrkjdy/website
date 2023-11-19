@@ -9,7 +9,7 @@ type CustomRenderOptions = RenderOptions & {
 export const customRender = (
   templateMarkdown: string,
   { assetPrefix = "", ...otherRenderOpts }: CustomRenderOptions = {},
-) => {
+): readonly [html: string, markdown: string] => {
   const assetPattern = /{{\s*asset:\s*"([^"]*)"\s*}}/g;
   const markdown = templateMarkdown.replaceAll(assetPattern, (_, filename) => {
     if (typeof filename !== "string") {

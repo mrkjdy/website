@@ -1,4 +1,4 @@
-import { Filter } from "../islands/BlogIndexForm.tsx";
+import { Filter } from "../routes/blogs/index.tsx";
 
 type BlogTagLinksProps = {
   tags: string[];

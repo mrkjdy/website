@@ -1,4 +1,4 @@
-import { parse, Renderer } from "https://esm.sh/marked@7.0.0";
+import { parse, Renderer } from "https://esm.sh/marked@10.0.0";
 
 type Header = {
   text: string;

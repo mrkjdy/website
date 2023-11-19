@@ -4,6 +4,7 @@ import { parse } from "$std/yaml/parse.ts";
 import { Format, Parser } from "$std/front_matter/mod.ts";
 import { isRecord } from "./helper.ts";
 import { customRender } from "../components/Markdown.tsx";
+import { IS_BROWSER } from "$fresh/runtime.ts";
 
 type BlogAttrs = {
   title: string;
@@ -92,16 +93,18 @@ export const blogMap = new Map<string, Blog>();
 
 const extractYaml = createExtractor({ [Format.YAML]: parse as Parser });
 
-for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
-  const { name: filename } = dirEntry;
-  if (dirEntry.isFile && filename.endsWith(".md")) {
-    const blogPath = `${BLOGS_DIR_PATH}${filename}`;
-    const fileContents = await Deno.readTextFile(blogPath);
-    const blogBasename = basename(filename, extname(filename));
-    const { attrs, body: templateMarkdown } = extractYaml(fileContents);
-    const blogAttrs = extractBlogAttrs(attrs);
-    const blog = createBlog(blogAttrs, templateMarkdown, blogBasename);
-    blogMap.set(blogBasename, blog);
+if (!IS_BROWSER) { // So that islands work
+  for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
+    const { name: filename } = dirEntry;
+    if (dirEntry.isFile && filename.endsWith(".md")) {
+      const blogPath = `${BLOGS_DIR_PATH}${filename}`;
+      const fileContents = await Deno.readTextFile(blogPath);
+      const blogBasename = basename(filename, extname(filename));
+      const { attrs, body: templateMarkdown } = extractYaml(fileContents);
+      const blogAttrs = extractBlogAttrs(attrs);
+      const blog = createBlog(blogAttrs, templateMarkdown, blogBasename);
+      blogMap.set(blogBasename, blog);
+    }
   }
 }
 

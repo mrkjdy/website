@@ -1,6 +1,5 @@
-import { sortBlogs } from "./blogs/index.tsx";
+import { Sort, sortBlogs } from "./blogs/index.tsx";
 import { blogArray } from "../utils/blogs.ts";
-import { Sort } from "../islands/BlogIndexForm.tsx";
 import BlogTagLinks from "../components/BlogTagLinks.tsx";
 
 const sortedBlogs = sortBlogs(blogArray, Sort.NEWEST);

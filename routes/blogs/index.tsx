@@ -1,12 +1,19 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Blog, blogArray } from "../../utils/blogs.ts";
 import { match } from "../../utils/helper.ts";
-import BlogIndexForm, {
-  Filter,
-  Sort,
-  SORT_PARAM,
-} from "../../islands/BlogIndexForm.tsx";
+import BlogIndexForm from "../../islands/BlogIndexForm.tsx";
 import BlogTagLinks from "../../components/BlogTagLinks.tsx";
+
+export const SORT_PARAM = "sort";
+
+export enum Sort {
+  NEWEST = "Newest",
+  OLDEST = "Oldest",
+}
+
+export enum Filter {
+  TAG = "tag",
+}
 
 const sorts = Object.values(Sort);
 

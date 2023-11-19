@@ -2,17 +2,7 @@ import { useRef } from "preact/hooks";
 import Dropdown from "../islands/Dropdown.tsx";
 import MultiSelect from "../islands/MultiSelect.tsx";
 import XMarkIcon from "../components/icons/20/XMarkIcon.tsx";
-
-export const SORT_PARAM = "sort";
-
-export enum Sort {
-  NEWEST = "Newest",
-  OLDEST = "Oldest",
-}
-
-export enum Filter {
-  TAG = "tag",
-}
+import { Filter, Sort, SORT_PARAM } from "../routes/blogs/index.tsx";
 
 type BlogIndexMenuProps = {
   sorts: Sort[];
