@@ -3,7 +3,7 @@
   "editor.rulers": [80],
   "editor.tabSize": 2,
   "files.autoSave": "onWindowChange",
-  "deno.unstable": true,
+  "deno.unstable": false,
   "deno.importMap": "./deno.json",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
@@ -26,5 +26,7 @@
   "[markdown]": {
     "editor.rulers": [72, 80]
   },
-  "markdown.extension.toc.orderedList": true
+  "markdown.extension.toc.orderedList": true,
+  "deno.enable": true,
+  "deno.lint": true
 }
