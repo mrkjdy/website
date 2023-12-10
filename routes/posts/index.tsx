@@ -1,8 +1,8 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Blog, blogArray } from "../../utils/blogs.ts";
+import { Post, postArray } from "../../utils/posts.ts";
 import { match } from "../../utils/helper.ts";
-import BlogIndexForm from "../../islands/BlogIndexForm.tsx";
-import BlogTagLinks from "../../components/BlogTagLinks.tsx";
+import PostIndexForm from "../../islands/PostIndexForm.tsx";
+import PostTagLinks from "../../components/PostTagLinks.tsx";
 
 export const SORT_PARAM = "sort";
 
@@ -24,30 +24,30 @@ const isLowerSort = (v: unknown): v is Lowercase<Sort> =>
 
 const DEFAULT_SORT = Sort.NEWEST;
 
-const allTags = new Set(blogArray.map(({ tags }) => tags).flat());
+const allTags = new Set(postArray.map(({ tags }) => tags).flat());
 
-type BlogIndexData = {
-  blogs: Blog[];
+type PostIndexData = {
+  posts: Post[];
   currentSort: Sort;
   tags: [tag: string, selected: boolean][];
 };
 
-export const sortBlogs = (blogsToSort: Blog[], sort: Sort): Blog[] =>
+export const sortPosts = (postsToSort: Post[], sort: Sort): Post[] =>
   match(sort, {
     [Sort.NEWEST]: () =>
-      blogsToSort.sort((blogA, blogB) =>
-        blogB.date.valueOf() - blogA.date.valueOf()
+      postsToSort.sort((postA, postB) =>
+        postB.date.valueOf() - postA.date.valueOf()
       ),
     [Sort.OLDEST]: () =>
-      blogsToSort.sort((blogA, blogB) =>
-        blogA.date.valueOf() - blogB.date.valueOf()
+      postsToSort.sort((postA, postB) =>
+        postA.date.valueOf() - postB.date.valueOf()
       ),
   });
 
-export const handler: Handlers<BlogIndexData> = {
+export const handler: Handlers<PostIndexData> = {
   GET: (req, ctx) => {
     const url = new URL(req.url);
-    // Filter the blogs
+    // Filter the posts
     const passedTags = url.searchParams.getAll(Filter.TAG);
     const validTags = passedTags.filter((tag) => allTags.has(tag));
     if (passedTags.length !== validTags.length) {
@@ -56,16 +56,16 @@ export const handler: Handlers<BlogIndexData> = {
       return Response.redirect(url);
     }
     const tagsToShowMap = new Map<string, boolean>();
-    const blogsToShow: Blog[] = blogArray.filter((blog) =>
+    const postsToShow: Post[] = postArray.filter((post) =>
       validTags.length <= 0 ||
-      validTags.every((tag) => blog.tags.includes(tag))
+      validTags.every((tag) => post.tags.includes(tag))
     );
-    blogsToShow.forEach((blog) =>
-      blog.tags.forEach((tag) =>
+    postsToShow.forEach((post) =>
+      post.tags.forEach((tag) =>
         tagsToShowMap.set(tag, validTags.includes(tag))
       )
     );
-    // Sort the blogs
+    // Sort the posts
     const givenSort = url.searchParams.get(SORT_PARAM) ?? DEFAULT_SORT;
     const lowerSort = givenSort.toLowerCase();
     if (!isLowerSort(lowerSort)) {
@@ -73,9 +73,9 @@ export const handler: Handlers<BlogIndexData> = {
       return Response.redirect(url);
     }
     const correspondingSort = sorts[lowerSorts.indexOf(lowerSort)];
-    const sortedBlogsToShow = sortBlogs(blogsToShow, correspondingSort);
+    const sortedPostsToShow = sortPosts(postsToShow, correspondingSort);
     return ctx.render({
-      blogs: sortedBlogsToShow,
+      posts: sortedPostsToShow,
       currentSort: correspondingSort,
       tags: [...tagsToShowMap.entries()].sort(([tagA], [tagB]) =>
         tagA.localeCompare(tagB)
@@ -85,12 +85,12 @@ export const handler: Handlers<BlogIndexData> = {
 };
 
 export default (
-  { data: { blogs, currentSort, tags } }: PageProps<BlogIndexData>,
+  { data: { posts, currentSort, tags } }: PageProps<PostIndexData>,
 ) => (
   <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
     <div class="flex justify-between flex-col space-y-4 sm:space-y-0 sm:flex-row">
-      <h1 class="text-4xl font-bold">Blogs</h1>
-      <BlogIndexForm
+      <h1 class="text-4xl font-bold">Posts</h1>
+      <PostIndexForm
         sorts={sorts}
         currentSort={currentSort}
         tags={tags}
@@ -98,23 +98,23 @@ export default (
     </div>
     <br />
     <div class="space-y-4">
-      {blogs.map((blog) => (
+      {posts.map((post) => (
         <div class="dark:bg-[#161B22] rounded-md border border-[#30363d] p-4">
           <h2>
-            <a class="text-3xl" href={blog.href}>{blog.title}</a>
+            <a class="text-3xl" href={post.href}>{post.title}</a>
           </h2>
           <br />
           <div class="flex space-x-4">
-            <span>{blog.formattedDate}</span>
-            <span>{`${blog.minutesToRead} minute read`}</span>
+            <span>{post.formattedDate}</span>
+            <span>{`${post.minutesToRead} minute read`}</span>
             <span>
-              <BlogTagLinks tags={blog.tags} />
+              <PostTagLinks tags={post.tags} />
             </span>
           </div>
           <br />
-          <p>{blog.description}</p>
+          <p>{post.description}</p>
           <br />
-          <a href={blog.href}>Read more</a>
+          <a href={post.href}>Read more</a>
         </div>
       ))}
     </div>

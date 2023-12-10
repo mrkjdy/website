@@ -1,14 +1,14 @@
-import { Filter } from "../routes/blogs/index.tsx";
+import { Filter } from "../routes/posts/index.tsx";
 
-type BlogTagLinksProps = {
+type PostTagLinksProps = {
   tags: string[];
 };
 
-export default ({ tags }: BlogTagLinksProps) => (
+export default ({ tags }: PostTagLinksProps) => (
   <>
     {tags.map((tag, index) => {
       const params = new URLSearchParams({ [Filter.TAG]: tag });
-      const href = `/blogs?${params.toString()}`;
+      const href = `/posts?${params.toString()}`;
       return (
         <>
           <a href={href} class="underline">{tag}</a>

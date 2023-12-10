@@ -7,13 +7,13 @@ import * as $_500 from "./routes/_500.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
 import * as $about from "./routes/about.tsx";
-import * as $blogs_name_ from "./routes/blogs/[name].tsx";
-import * as $blogs_index from "./routes/blogs/index.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $BlogIndexForm from "./islands/BlogIndexForm.tsx";
+import * as $posts_name_ from "./routes/posts/[name].tsx";
+import * as $posts_index from "./routes/posts/index.tsx";
 import * as $Dropdown from "./islands/Dropdown.tsx";
 import * as $MultiSelect from "./islands/MultiSelect.tsx";
 import * as $Nav from "./islands/Nav.tsx";
+import * as $PostIndexForm from "./islands/PostIndexForm.tsx";
 import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -23,15 +23,15 @@ const manifest = {
     "./routes/_app.tsx": $_app,
     "./routes/_middleware.ts": $_middleware,
     "./routes/about.tsx": $about,
-    "./routes/blogs/[name].tsx": $blogs_name_,
-    "./routes/blogs/index.tsx": $blogs_index,
     "./routes/index.tsx": $index,
+    "./routes/posts/[name].tsx": $posts_name_,
+    "./routes/posts/index.tsx": $posts_index,
   },
   islands: {
-    "./islands/BlogIndexForm.tsx": $BlogIndexForm,
     "./islands/Dropdown.tsx": $Dropdown,
     "./islands/MultiSelect.tsx": $MultiSelect,
     "./islands/Nav.tsx": $Nav,
+    "./islands/PostIndexForm.tsx": $PostIndexForm,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

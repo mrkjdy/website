@@ -6,7 +6,7 @@ import { isRecord } from "./helper.ts";
 import { customRender } from "../components/Markdown.tsx";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
-type BlogAttrs = {
+type PostAttrs = {
   title: string;
   date: string;
   tags: string[];
@@ -14,36 +14,36 @@ type BlogAttrs = {
   coverPhoto: string;
 };
 
-const extractBlogAttrs = (attrs: Record<string, unknown>): BlogAttrs => {
+const extractPostAttrs = (attrs: Record<string, unknown>): PostAttrs => {
   if (!isRecord(attrs)) {
     throw new Error(
-      `Blog attributes must be a Record. Received a ${typeof attrs}`,
+      `Post attributes must be a Record. Received a ${typeof attrs}`,
     );
   }
   let { title, date, coverPhoto, tags, description } = attrs;
   if (typeof title !== "string") {
-    throw new Error("Blog front matter must have a title of type string");
+    throw new Error("Post front matter must have a title of type string");
   }
   if (typeof date !== "string") {
-    throw new Error("Blog front matter must have a date of type string");
+    throw new Error("Post front matter must have a date of type string");
   }
   if (typeof description !== "string") {
-    throw new Error("Blog front matter must have a description of type string");
+    throw new Error("Post front matter must have a description of type string");
   }
   if (typeof coverPhoto !== "string") {
-    throw new Error("Blog front matter must have an image of type string");
+    throw new Error("Post front matter must have an image of type string");
   }
   tags ??= [];
   if (!Array.isArray(tags)) {
-    throw new Error("Blog front matter tags must be an array");
+    throw new Error("Post front matter tags must be an array");
   }
   if (!tags.every((tag): tag is string => typeof tag === "string")) {
-    throw new Error("Blog front matter tags may only be an array of strings");
+    throw new Error("Post front matter tags may only be an array of strings");
   }
   return { title, date, coverPhoto, tags, description };
 };
 
-export type Blog = Omit<BlogAttrs, "date"> & {
+export type Post = Omit<PostAttrs, "date"> & {
   html: string;
   minutesToRead: number;
   href: string;
@@ -52,12 +52,12 @@ export type Blog = Omit<BlogAttrs, "date"> & {
   markdown: string;
 };
 
-const createBlog = (
-  blogAttrs: BlogAttrs,
+const createPost = (
+  postAttrs: PostAttrs,
   templateMarkdown: string,
-  blogPath: string,
-): Blog => {
-  const href = `/blogs/${blogPath}`;
+  postPath: string,
+): Post => {
+  const href = `/posts/${postPath}`;
   const [html, markdown] = customRender(templateMarkdown, {
     assetPrefix: `${href}/`,
   });
@@ -68,15 +68,15 @@ const createBlog = (
     .length;
   const wordsPerMinute = 200;
   const minutesToRead = Math.ceil(numberOfWords / wordsPerMinute);
-  const date = new Date(blogAttrs.date);
+  const date = new Date(postAttrs.date);
   const formattedDate = date.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
-  const coverPhoto = `/images/${blogPath}/${blogAttrs.coverPhoto}`;
+  const coverPhoto = `/images/${postPath}/${postAttrs.coverPhoto}`;
   return {
-    ...blogAttrs,
+    ...postAttrs,
     href,
     html,
     minutesToRead,
@@ -87,25 +87,25 @@ const createBlog = (
   };
 };
 
-const BLOGS_DIR_PATH = "./static/blogs/";
+const POSTS_DIR_PATH = "./static/posts/";
 
-export const blogMap = new Map<string, Blog>();
+export const postMap = new Map<string, Post>();
 
 const extractYaml = createExtractor({ [Format.YAML]: parse as Parser });
 
 if (!IS_BROWSER) { // So that islands work
-  for await (const dirEntry of Deno.readDir(BLOGS_DIR_PATH)) {
+  for await (const dirEntry of Deno.readDir(POSTS_DIR_PATH)) {
     const { name: filename } = dirEntry;
     if (dirEntry.isFile && filename.endsWith(".md")) {
-      const blogPath = `${BLOGS_DIR_PATH}${filename}`;
-      const fileContents = await Deno.readTextFile(blogPath);
-      const blogBasename = basename(filename, extname(filename));
+      const postPath = `${POSTS_DIR_PATH}${filename}`;
+      const fileContents = await Deno.readTextFile(postPath);
+      const postBasename = basename(filename, extname(filename));
       const { attrs, body: templateMarkdown } = extractYaml(fileContents);
-      const blogAttrs = extractBlogAttrs(attrs);
-      const blog = createBlog(blogAttrs, templateMarkdown, blogBasename);
-      blogMap.set(blogBasename, blog);
+      const postAttrs = extractPostAttrs(attrs);
+      const post = createPost(postAttrs, templateMarkdown, postBasename);
+      postMap.set(postBasename, post);
     }
   }
 }
 
-export const blogArray = [...blogMap.values()];
+export const postArray = [...postMap.values()];
