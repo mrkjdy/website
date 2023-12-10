@@ -17,8 +17,6 @@ export default {
   preflight: {
     "@import":
       `url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap')`,
-    body:
-      apply`text-black dark:text-white font-sans bg-white dark:bg-[#0d1117]`,
     "::-webkit-scrollbar": apply`w-3 h-3`,
     "::-webkit-scrollbar-thumb": apply`bg-gray-300 dark:bg-gray-700`,
     "::-webkit-scrollbar-thumb:hover": apply`bg-gray-400 dark:bg-gray-600`,

@@ -1,7 +1,7 @@
 import { basename, extname } from "$std/path/mod.ts";
 import { createExtractor } from "./markdown.ts";
-import { parse } from "$std/yaml/parse.ts";
-import { Format, Parser } from "$std/front_matter/mod.ts";
+import { parse as parseYaml } from "$std/yaml/parse.ts";
+import { Parser } from "$std/front_matter/mod.ts";
 import { isRecord } from "./helper.ts";
 import { customRender } from "../components/Markdown.tsx";
 import { IS_BROWSER } from "$fresh/runtime.ts";
@@ -91,7 +91,7 @@ const POSTS_DIR_PATH = "./static/posts/";
 
 export const postMap = new Map<string, Post>();
 
-const extractYaml = createExtractor({ [Format.YAML]: parse as Parser });
+const extractYaml = createExtractor({ "yaml": parseYaml as Parser });
 
 if (!IS_BROWSER) { // So that islands work
   for await (const dirEntry of Deno.readDir(POSTS_DIR_PATH)) {
