@@ -6,7 +6,7 @@ tags:
   - deno
   - fresh
 description: In this post, I show how and why I built my blog
-coverPhoto: ../test/cover.png # Use beach picture from google photos
+coverPhoto: cover.jpg
 ---
 
 ## Motivation

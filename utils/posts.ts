@@ -6,7 +6,7 @@ import { isRecord } from "./helper.ts";
 import { customRender } from "../components/Markdown.tsx";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
-type PostAttrs = {
+type PostAttributes = {
   title: string;
   date: string;
   tags: string[];
@@ -14,7 +14,9 @@ type PostAttrs = {
   coverPhoto: string;
 };
 
-const extractPostAttrs = (attrs: Record<string, unknown>): PostAttrs => {
+const verifyPostAttributes = (
+  attrs: Record<string, unknown>,
+): PostAttributes => {
   if (!isRecord(attrs)) {
     throw new Error(
       `Post attributes must be a Record. Received a ${typeof attrs}`,
@@ -43,7 +45,7 @@ const extractPostAttrs = (attrs: Record<string, unknown>): PostAttrs => {
   return { title, date, coverPhoto, tags, description };
 };
 
-export type Post = Omit<PostAttrs, "date"> & {
+export type Post = Omit<PostAttributes, "date"> & {
   html: string;
   minutesToRead: number;
   href: string;
@@ -53,7 +55,7 @@ export type Post = Omit<PostAttrs, "date"> & {
 };
 
 const createPost = (
-  postAttrs: PostAttrs,
+  postAttrs: PostAttributes,
   templateMarkdown: string,
   postPath: string,
 ): Post => {
@@ -101,7 +103,7 @@ if (!IS_BROWSER) { // So that islands work
       const fileContents = await Deno.readTextFile(postPath);
       const postBasename = basename(filename, extname(filename));
       const { attrs, body: templateMarkdown } = extractYaml(fileContents);
-      const postAttrs = extractPostAttrs(attrs);
+      const postAttrs = verifyPostAttributes(attrs);
       const post = createPost(postAttrs, templateMarkdown, postBasename);
       postMap.set(postBasename, post);
     }
