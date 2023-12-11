@@ -13,6 +13,7 @@ export default ({ Component }: PageProps) => (
         type="image/x-icon"
         href={asset("/favicon.svg")}
       />
+      <link rel="stylesheet" href={asset("/styles.css")} />
     </Head>
     <body class="text-black dark:text-white font-sans bg-white dark:bg-[#0d1117]">
       <div class="flex flex-col items-center relative min-h-screen top-0">

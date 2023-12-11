@@ -32,7 +32,7 @@ taste in your mouth. Such as:
 These same people, who are tired of cumbersome Node JS web frameworks, have
 created some slick, **minimal**, web frameworks for it. One such framework is
 Fresh. If you're thinking: "No! Not another web framework!", hear me out. Fresh
-is great because it has:
+is great because out of the box it has:
 
 - no build step
 - no configuration

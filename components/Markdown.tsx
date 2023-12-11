@@ -42,7 +42,6 @@ export default (props: MarkdownProps) => {
     <>
       <Head>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
-        <link rel="stylesheet" href={asset("/styles/markdown-body.css")} />
       </Head>
       <div
         data-color-mode="auto"
