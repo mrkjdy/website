@@ -5,8 +5,8 @@ tags:
   - react
   - deno
   - fresh
-description: In this post, I show how and why I built my blog
-coverPhoto: cover.jpg
+description: How and why I built my blog ... and you can too!
+coverPhoto: cover.png
 ---
 
 ## Motivation
@@ -242,13 +242,17 @@ modifications to the example code above.
 
 ## Improvements
 
-This guide should help you get started with Fresh and understand the basic
-design of a blog. You will need to make some important improvements in order for
-it to look good and be browsable. You can take a look at the code of my blog, or
-if you like it, you can fork it and customize it to your needs.
+I hope you've found this guide useful! It should help you get started with Fresh
+and understand the basic design of a blog. You will need to make some important
+improvements such as
+[setting up styles](https://fresh.deno.dev/docs/examples/migrating-to-tailwind),
+and adding things like a home page and a list of posts. You can take a look at
+the code of my blog, or if you like it, you can fork it and customize it to your
+needs.
 
-A few things I plan on adding in the future are:
+A few things I plan on adding to this site later are:
 
 - comments on posts
 - likes on posts
 - a way to search posts
+- post thumbnails
