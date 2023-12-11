@@ -4,7 +4,7 @@ import Bars3Icon from "../components/icons/24/Bars3Icon.tsx";
 
 const headerPairs = [
   ["Home", "/"],
-  ["Blogs", "/blogs"],
+  ["Posts", "/posts"],
   ["About", "/about"],
   ["Source", "https://github.com/mrkjdy/webserver"],
 ] as const;

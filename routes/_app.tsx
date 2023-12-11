@@ -1,30 +1,37 @@
-import { asset, Head } from "$fresh/runtime.ts";
+import { asset, Head, Partial } from "$fresh/runtime.ts";
 import Nav from "../islands/Nav.tsx";
-import { AppProps } from "$fresh/server.ts";
+import { PageProps } from "$fresh/server.ts";
 import GoogleAnalyticsScripts from "../components/GoogleAnalyticsScripts.tsx";
 
-export default ({ Component }: AppProps) => (
-  <>
+export default ({ Component }: PageProps) => (
+  <html>
     <Head>
       <GoogleAnalyticsScripts />
-      {/* {addGoogleAnalytics()} */}
       <title>webserver</title>
       <link
         rel="icon"
         type="image/x-icon"
         href={asset("/favicon.svg")}
       />
+      <link rel="stylesheet" href={asset("/styles.css")} />
     </Head>
-    <div class="flex flex-col items-center relative min-h-screen top-0">
-      <Nav />
-      <main class="flex flex-col items-center mt-10 mb-20 w-full">
-        <Component />
-      </main>
-      <footer class="w-full flex flex-row justify-center h-10 absolute bottom-0 text-gray-400">
-        <p>
-          © 2023 Mark Judy
-        </p>
-      </footer>
-    </div>
-  </>
+    <body class="text-black dark:text-white font-sans bg-white dark:bg-[#0d1117]">
+      <div class="flex flex-col items-center relative min-h-screen top-0">
+        <Nav />
+        <main
+          class="flex flex-col items-center mt-10 mb-20 w-full"
+          f-client-nav
+        >
+          <Partial name="main">
+            <Component />
+          </Partial>
+        </main>
+        <footer class="w-full flex flex-row justify-center h-10 absolute bottom-0 text-gray-400">
+          <p>
+            © 2023 Mark Judy
+          </p>
+        </footer>
+      </div>
+    </body>
+  </html>
 );

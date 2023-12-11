@@ -13,5 +13,5 @@ export const match = <
 >(option: O, pattern: P) =>
   (pattern[option] ?? (pattern as PartialPattern<O>)._)() as P extends
     { [Key in O]: () => infer R } ? R
-    : P extends { [Key in O]?: () => infer R } & { _: () => infer D } ? R & D
+    : P extends { [Key in O]?: () => infer R } & { _: () => infer D } ? R | D
     : never;

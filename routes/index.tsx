@@ -1,43 +1,42 @@
-import { sortBlogs } from "./blogs/index.tsx";
-import { blogArray } from "../utils/blogs.ts";
-import { Sort } from "../islands/BlogIndexForm.tsx";
-import BlogTagLinks from "../components/BlogTagLinks.tsx";
+import { Sort, sortPosts } from "./posts/index.tsx";
+import { postArray } from "../utils/posts.ts";
+import PostTagLinks from "../components/PostTagLinks.tsx";
 
-const sortedBlogs = sortBlogs(blogArray, Sort.NEWEST);
+const sortedPosts = sortPosts(postArray, Sort.NEWEST);
 
-const latestThree = sortedBlogs.slice(0, 3);
+const latestThree = sortedPosts.slice(0, 3);
 
 export default () => (
   <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
     <p class="text-center">Hi 👋</p>
     <br />
     <p class="text-left">
-      Welcome to my website! I'll probably post blogs here about programming and
-      other things like cooking, and anything else that I find interesting. I
-      may even add some interactive content here too!
+      Welcome to my website! I'll probably write about programming, cooking, and
+      other things that I find interesting. I may even add some interactive
+      content here too!
     </p>
     <p class="text-right">- Mark Judy</p>
     <br />
-    <h1 class="text-4xl font-bold">Latest Blogs</h1>
+    <h1 class="text-4xl font-bold">Latest Posts</h1>
     <br />
     <div class="space-y-4">
-      {latestThree.map((blog) => (
+      {latestThree.map((post) => (
         <div class="dark:bg-[#161B22] rounded-md border border-[#30363d] p-4">
           <h2>
-            <a class="text-3xl" href={blog.href}>{blog.title}</a>
+            <a class="text-3xl" href={post.href}>{post.title}</a>
           </h2>
           <br />
           <div class="flex space-x-4">
-            <span>{blog.formattedDate}</span>
-            <span>{`${blog.minutesToRead} minute read`}</span>
+            <span>{post.formattedDate}</span>
+            <span>{`${post.minutesToRead} minute read`}</span>
             <span>
-              <BlogTagLinks tags={blog.tags} />
+              <PostTagLinks tags={post.tags} />
             </span>
           </div>
           <br />
-          <p>{blog.description}</p>
+          <p>{post.description}</p>
           <br />
-          <a href={blog.href}>Read more</a>
+          <a href={post.href}>Read more</a>
         </div>
       ))}
     </div>

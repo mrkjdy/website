@@ -9,7 +9,7 @@ type CustomRenderOptions = RenderOptions & {
 export const customRender = (
   templateMarkdown: string,
   { assetPrefix = "", ...otherRenderOpts }: CustomRenderOptions = {},
-) => {
+): readonly [html: string, markdown: string] => {
   const assetPattern = /{{\s*asset:\s*"([^"]*)"\s*}}/g;
   const markdown = templateMarkdown.replaceAll(assetPattern, (_, filename) => {
     if (typeof filename !== "string") {
@@ -20,7 +20,7 @@ export const customRender = (
     }
     return asset(`${assetPrefix}${filename}`);
   });
-  return render(markdown, otherRenderOpts);
+  return [render(markdown, otherRenderOpts), markdown];
 };
 
 type BaseMarkdownProps = {
@@ -42,7 +42,6 @@ export default (props: MarkdownProps) => {
     <>
       <Head>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
-        <link rel="stylesheet" href={asset("/styles/markdown-body.css")} />
       </Head>
       <div
         data-color-mode="auto"

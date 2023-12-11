@@ -1,26 +1,16 @@
 import { useRef } from "preact/hooks";
-import Dropdown from "../islands/Dropdown.tsx";
-import MultiSelect from "../islands/MultiSelect.tsx";
+import Dropdown from "./Dropdown.tsx";
+import MultiSelect from "./MultiSelect.tsx";
 import XMarkIcon from "../components/icons/20/XMarkIcon.tsx";
+import { Filter, Sort, SORT_PARAM } from "../routes/posts/index.tsx";
 
-export const SORT_PARAM = "sort";
-
-export enum Sort {
-  NEWEST = "Newest",
-  OLDEST = "Oldest",
-}
-
-export enum Filter {
-  TAG = "tag",
-}
-
-type BlogIndexMenuProps = {
+type PostIndexMenuProps = {
   sorts: Sort[];
   currentSort: Sort;
   tags: [tag: string, selected: boolean][];
 };
 
-export default ({ sorts, currentSort, tags }: BlogIndexMenuProps) => {
+export default ({ sorts, currentSort, tags }: PostIndexMenuProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const numSelected = tags.reduce(
     (sum, [_, selected]) => sum + (selected ? 1 : 0),
@@ -32,7 +22,7 @@ export default ({ sorts, currentSort, tags }: BlogIndexMenuProps) => {
     <form
       ref={formRef}
       class="flex space-x-4 items-end self-end"
-      aria-label="Filter and Sort Blogs"
+      aria-label="Filter and Sort Posts"
     >
       {numSelected > 0 && (
         <button
