@@ -6,7 +6,7 @@ const headerPairs = [
   ["Home", "/"],
   ["Posts", "/posts"],
   ["About", "/about"],
-  ["Source", "https://github.com/mrkjdy/webserver"],
+  ["Source", "https://github.com/mrkjdy/website"],
 ] as const;
 
 export default () => {
