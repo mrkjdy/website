@@ -168,7 +168,7 @@ export const handler: Handlers<string> = {
   },
 };
 
-// Let's modidfy our render function to use the Markdown component with
+// Let's modify our render function to use the Markdown component with
 // the Markdown passed from our handler.
 export default (props: PageProps<string>) => (
   <>
@@ -218,15 +218,15 @@ for await (const dirEntry of Deno.readDir(POSTS_DIR_PATH)) {
 }
 ```
 
-Now we have basically everything we need! I'd recommend creating some test posts
-to see how they look.
+Now we have nearly everything we need! I'd recommend creating some test posts to
+see how they look.
 
 ### Post Frontmatter
 
 Although we have the ability to render posts, we don't have a great way to
-browse through posts or show information about each post in a uniform way. In
-other words, right now we don't have a way to display information like the post
-title, date, tags, etc. in a common location.
+browse through them or display each one in a uniform way. In other words, right
+now we don't have a way to display information like the post title, date, tags,
+etc. in a common location.
 
 One way to accomplish this, is to add parsable
 [frontmatter](https://en.wikipedia.org/wiki/Book_design#Front_matter) to the
