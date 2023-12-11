@@ -33,7 +33,10 @@ Minutes to read: ${post.minutesToRead}`;
       <article class="w-full max-w-[min(65ch,calc(100%-2rem))]">
         <h1 class="text-4xl font-bold">{post.title}</h1>
         <br />
-        <img src={asset(post.coverPhoto)} alt="Cover" />
+        <img src={asset(post.cover)} alt={post.coverAltText ?? "Cover"} />
+        {post.coverAltText !== undefined && (
+          <p class="italic text-sm">{post.coverAltText}</p>
+        )}
         <br />
         <p class="flex space-x-4">
           <span>{post.formattedDate}</span>

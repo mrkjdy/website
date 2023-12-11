@@ -6,7 +6,7 @@ tags:
   - deno
   - fresh
 description: How and why I built my blog ... and you can too!
-coverPhoto: cover.png
+coverAltText: "Note: Although this image is AI generated, the rest of this post is not."
 ---
 
 ## Motivation

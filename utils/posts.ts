@@ -11,7 +11,9 @@ type PostAttributes = {
   date: string;
   tags: string[];
   description: string;
-  coverPhoto: string;
+  cover: string;
+  coverAltText: string | undefined;
+  thumb: string;
 };
 
 const verifyPostAttributes = (
@@ -22,7 +24,7 @@ const verifyPostAttributes = (
       `Post attributes must be a Record. Received a ${typeof attrs}`,
     );
   }
-  let { title, date, coverPhoto, tags, description } = attrs;
+  let { title, date, cover, coverAltText, tags, description, thumb } = attrs;
   if (typeof title !== "string") {
     throw new Error("Post front matter must have a title of type string");
   }
@@ -32,8 +34,16 @@ const verifyPostAttributes = (
   if (typeof description !== "string") {
     throw new Error("Post front matter must have a description of type string");
   }
-  if (typeof coverPhoto !== "string") {
-    throw new Error("Post front matter must have an image of type string");
+  cover ??= "cover.png";
+  if (typeof cover !== "string") {
+    throw new Error("Post front matter may have an image of type string");
+  }
+  if (coverAltText !== undefined && typeof coverAltText !== "string") {
+    throw new Error("Post front matter may have a coverAltText of type string");
+  }
+  thumb ??= "thumb.png";
+  if (typeof thumb !== "string") {
+    throw new Error("Post front matter may have an image of type string");
   }
   tags ??= [];
   if (!Array.isArray(tags)) {
@@ -42,7 +52,7 @@ const verifyPostAttributes = (
   if (!tags.every((tag): tag is string => typeof tag === "string")) {
     throw new Error("Post front matter tags may only be an array of strings");
   }
-  return { title, date, coverPhoto, tags, description };
+  return { title, date, cover, coverAltText, thumb, tags, description };
 };
 
 export type Post = Omit<PostAttributes, "date"> & {
@@ -76,14 +86,14 @@ const createPost = (
     day: "numeric",
     year: "numeric",
   });
-  const coverPhoto = `/images/${postPath}/${postAttrs.coverPhoto}`;
+  const cover = `/images/${postPath}/${postAttrs.cover}`;
   return {
     ...postAttrs,
     href,
     html,
     minutesToRead,
     date, // Overwrite the date with a Date object
-    coverPhoto, // Overwrite the relative coverPhoto path
+    cover, // Overwrite the relative coverPhoto path
     formattedDate,
     markdown,
   };
