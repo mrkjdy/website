@@ -1,6 +1,6 @@
 ---
 title: How to Build a Blog
-date: 12/10/2023
+date: 12/29/2023
 tags:
   - react
   - deno
@@ -21,7 +21,7 @@ So much so, that he's created a new JavaScript (and TypeScript) runtime called
 Deno. It fixes many of the things about Node JS that probably leave a bitter
 taste in your mouth. Such as:
 
-- out of the box TypeScript support
+- out-of-the-box TypeScript support
 - built-in formatting
 - built-in linting
 - top-level async/await
@@ -32,7 +32,7 @@ taste in your mouth. Such as:
 These same people, who are tired of cumbersome Node JS web frameworks, have
 created some slick, **minimal**, web frameworks for it. One such framework is
 Fresh. If you're thinking: "No! Not another web framework!", hear me out. Fresh
-is great because out of the box it has:
+is great because out-of-the-box it has:
 
 - no build step
 - no configuration
@@ -40,7 +40,7 @@ is great because out of the box it has:
 - simplicity
 
 Fresh does all of those things and more. It's so clean and simple that it "makes
-web development fun again". Deno and Fresh complement each other like sunshine
+web development fun again." Deno and Fresh complement each other like sunshine
 and beaches.
 
 The cherry on top is that Deno and Fresh have both been designed for deployment
@@ -137,7 +137,7 @@ This gives us a route that just responds with whatever path we put after
 
 ### Handling Post Requests
 
-What do we need next? Well, if the `name` param represents a path to a post, we
+What do we need next? Since the `name` param represents a path to a post, we
 should use it to find a corresponding Markdown file, and render the post if it
 exists, or a 404 page if it doesn't. The docs explain that we can create a
 [handler](https://fresh.deno.dev/docs/getting-started/custom-handlers) to
