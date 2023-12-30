@@ -1,6 +1,6 @@
 ---
 title: How to Build a Blog
-date: 12/29/2023
+date: 12/30/2023
 tags:
   - react
   - deno
@@ -32,7 +32,7 @@ taste in your mouth. Such as:
 These same people, who are tired of cumbersome Node JS web frameworks, have
 created some slick, **minimal**, web frameworks for it. One such framework is
 Fresh. If you're thinking: "No! Not another web framework!", hear me out. Fresh
-is great because out-of-the-box it has:
+is great because right out of the box it has:
 
 - no build step
 - no configuration
