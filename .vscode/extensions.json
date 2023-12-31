@@ -1,6 +1,9 @@
 {
   "recommendations": [
     "github.vscode-github-actions",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "yzhang.markdown-all-in-one",
+    "ms-azuretools.vscode-docker",
+    "denoland.vscode-deno"
   ]
 }

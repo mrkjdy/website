@@ -7,11 +7,11 @@ export default ({ Component }: PageProps) => (
   <html>
     <Head>
       <GoogleAnalyticsScripts />
-      <title>webserver</title>
+      <title key="title">mrkjdy.dev</title>
       <link
         rel="icon"
-        type="image/x-icon"
-        href={asset("/favicon.svg")}
+        type="image/png"
+        href={asset("/images/favicon.png")}
       />
       <link rel="stylesheet" href={asset("/styles.css")} />
     </Head>
