@@ -14,6 +14,7 @@ export default ({ Component }: PageProps) => (
         href={asset("/images/favicon.png")}
       />
       <link rel="stylesheet" href={asset("/styles.css")} />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </Head>
     <body class="text-black dark:text-white font-sans bg-white dark:bg-[#0d1117]">
       <div class="flex flex-col items-center relative min-h-screen top-0">
