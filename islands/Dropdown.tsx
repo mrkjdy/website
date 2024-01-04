@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import CheckIcon from "../components/icons/20/CheckIcon.tsx";
-import ChevronDownIcon from "../components/icons/20/ChevronDownIcon.tsx";
-import ChevronUpIcon from "../components/icons/20/ChevronUpIcon.tsx";
+import IconCheck from "$tabler/icons/tsx/check.tsx";
+import IconChevronDown from "$tabler/icons/tsx/chevron-down.tsx";
+import IconChevronUp from "$tabler/icons/tsx/chevron-up.tsx";
 import { match } from "../utils/helper.ts";
 
 export type DropdownPosition = {
@@ -150,7 +150,7 @@ export default <T extends string>(
       >
         <span>{buttonText ?? selectedOption}</span>
         <span class="sr-only">Toggle dropdown menu</span>
-        {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        {isOpen ? <IconChevronUp /> : <IconChevronDown />}
       </button>
       <input
         type="hidden"
@@ -170,7 +170,7 @@ export default <T extends string>(
             <li
               key={option}
               onClick={() => handleOptionClick(optionIndex)}
-              class={`flex justify-between space-x-2 cursor-pointer px-2 py-2 \
+              class={`flex space-x-2 cursor-pointer px-2 py-2 \
               items-center justify-end hover:${activeListItemClass} ${
                 optionIndex === focusIndex ? activeListItemClass : ""
               } ${setListItemClass(optionIndex)}`}
@@ -180,7 +180,7 @@ export default <T extends string>(
               ref={optionRefs[optionIndex]}
               aria-selected={option === selectedOption}
             >
-              {option === selectedOption && <CheckIcon />}
+              {option === selectedOption && <IconCheck />}
               <span>{option}</span>
             </li>
           ))}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import XMarkIcon from "../components/icons/24/XMarkIcon.tsx";
-import Bars3Icon from "../components/icons/24/Bars3Icon.tsx";
+import IconX from "$tabler/icons/tsx/x.tsx";
+import IconMenu2 from "$tabler/icons/tsx/menu-2.tsx";
 
 const headerPairs = [
   ["Home", "/"],
@@ -59,8 +59,8 @@ export default () => {
         aria-labelledby="hamburgerButton"
       >
         {isHamburgerMenuOpen
-          ? <XMarkIcon id="hamburgerButton" title="Close Side Nav" />
-          : <Bars3Icon id="hamburgerButton" title="Open Side Nav" />}
+          ? <IconX id="hamburgerButton" title="Close Side Nav" />
+          : <IconMenu2 id="hamburgerButton" title="Open Side Nav" />}
       </button>
       <nav
         class={`${

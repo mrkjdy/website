@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { DropdownPosition } from "./Dropdown.tsx";
 import { match } from "../utils/helper.ts";
-import CheckCircleEmptyIcon from "../components/icons/20/CheckCircleEmptyIcon.tsx";
-import CheckCircleIcon from "../components/icons/20/CheckCircleIcon.tsx";
-import ChevronDownIcon from "../components/icons/20/ChevronDownIcon.tsx";
-import ChevronUpIcon from "../components/icons/20/ChevronUpIcon.tsx";
+import IconCircle from "$tabler/icons/tsx/circle.tsx";
+import IconCircleCheck from "$tabler/icons/tsx/circle-check.tsx";
+import IconChevronDown from "$tabler/icons/tsx/chevron-down.tsx";
+import IconChevronUp from "$tabler/icons/tsx/chevron-up.tsx";
 
 type OnChangeHandler = (options: [option: string, selected: boolean][]) => void;
 
@@ -158,7 +158,7 @@ export default (
         )}
         <span>{buttonText}</span>
         <span class="sr-only">Toggle multiselect menu</span>
-        {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        {isOpen ? <IconChevronUp /> : <IconChevronDown />}
       </button>
       {options.map(([option, selected]) => (
         <input
@@ -190,7 +190,7 @@ export default (
               ref={optionRefs[optionIndex]}
               aria-selected={selected}
             >
-              {selected ? <CheckCircleIcon /> : <CheckCircleEmptyIcon />}
+              {selected ? <IconCircleCheck /> : <IconCircle />}
               <span>{option}</span>
             </li>
           ))}
