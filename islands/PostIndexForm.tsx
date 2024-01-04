@@ -1,7 +1,7 @@
 import { useRef } from "preact/hooks";
 import Dropdown from "./Dropdown.tsx";
 import MultiSelect from "./MultiSelect.tsx";
-import XMarkIcon from "../components/icons/20/XMarkIcon.tsx";
+import IconX from "$tabler/icons/tsx/x.tsx";
 import { Filter, Sort, SORT_PARAM } from "../routes/posts/index.tsx";
 
 type PostIndexMenuProps = {
@@ -36,7 +36,7 @@ export default ({ sorts, currentSort, tags }: PostIndexMenuProps) => {
           aria-label="Clear Tags"
         >
           <span>Clear</span>
-          <XMarkIcon />
+          <IconX />
         </button>
       )}
       <MultiSelect
