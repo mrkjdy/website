@@ -46,8 +46,8 @@ and beaches.
 The cherry on top is that Deno and Fresh have both been designed for deployment
 on Deno Deploy, which is a serverless hosting service with zero config.
 Serverless hosting means that a service is only running when it is needed. It
-also means, that it's very cheap to run, and better for the environment! This
-site is currently hosted on it for free.
+also means that it's very cheap to run and better for the environment! This site
+is currently hosted on it for free.
 
 ## Implementation
 
@@ -60,15 +60,15 @@ design requirements:
 3. no additional code needs to be written to publish each post
 
 These might sound pretty basic, but it's important to start somewhere, and
-starting simple is the best way to ensure something actually gets done. Another
-popular tactic is to use a reference when building something new for the first
-time. It turns out, Fresh's docs are designed this same exact way, so we can
-just refer to its code! 😀
+starting simple is the best way to ensure something gets done. Another popular
+tactic is to use a reference when building something new for the first time. It
+turns out, that Fresh's docs are designed this same way, so we can just refer to
+its code! 😀
 
 ### Rendering Markdown
 
-In order to display a post on our site we'll need to convert (render) each
-markdown file into HTML. There happens to be a page in the Fresh docs about
+To display a post on our site we'll need to convert (render) each markdown file
+into HTML. There happens to be a page in the Fresh docs about
 [rendering Markdown](https://fresh.deno.dev/docs/examples/rendering-markdown).
 
 Let's start by building a component for rendering Markdown into HTML so that we
@@ -101,7 +101,7 @@ export default (props: MarkdownProps) => (
 
 **TODO**
 
-- You may want to add properties to MarkdownProps for things such as the render
+- You may want to add properties to MarkdownProps for things such as render
   options, custom styles, and classes. I had some trouble getting the rendered
   markdown to look right with the `CSS` from [`gfm`](https://deno.land/x/gfm),
   so I created a CSS file to patch some of the styles. You can see it
@@ -110,14 +110,14 @@ export default (props: MarkdownProps) => (
 ### Creating a Dynamic Route for Posts
 
 Now that we have a component that can be used to display Markdown, we need to
-actually use it to render our posts. The Fresh docs explain that we can use a
+use it to render our posts. The Fresh docs explain that we can use a
 [dynamic route](https://fresh.deno.dev/docs/getting-started/dynamic-routes) to
 render a page using a part of the path. For example, if someone goes to
 `www.oursite.com/posts/title-of-a-post`, then we can load the corresponding post
 and use it to render the page.
 
 Let's go ahead and create a file for a dynamic route like mentioned above. The
-Fresh docs give us a basic example that we can use to get started with, so let's
+Fresh docs give us a basic example that we can use to get started, so let's
 begin with something similar:
 
 ```tsx
@@ -183,7 +183,7 @@ export default (props: PageProps<string>) => (
   [Post Frontmatter](#post-frontmatter) section below to learn about adding
   things like a title, date, or tags to each post.
 - Fresh provides default error pages, but if you would like to customize them be
-  sure to checkout the docs
+  sure to check out the docs
   [here](https://fresh.deno.dev/docs/concepts/error-pages).
 
 ### Loading Posts from a Directory
@@ -223,21 +223,20 @@ see how they look.
 
 ### Post Frontmatter
 
-Although we have the ability to render posts, we don't have a great way to
-browse through them or display each one in a uniform way. In other words, right
-now we don't have a way to display information like the post title, date, tags,
-etc. in a common location.
+Although we can render posts, we don't have a great way to browse through them
+or display each one uniformly. In other words, right now we don't have a way to
+display information like the post title, date, tags, etc. in a common location.
 
-One way to accomplish this, is to add parsable
+One way to accomplish this is to add parsable
 [frontmatter](https://en.wikipedia.org/wiki/Book_design#Front_matter) to the
-beginning of each Markdown file. The Deno std library actually supports
-Frontmatter and is used by Fresh for extracting metadata on each page in the
-docs. You can checkout the docs for the `front_matter` module
+beginning of each Markdown file. The Deno std library supports Frontmatter and
+is used by Fresh for extracting metadata on each page in the docs. You can check
+out the docs for the `front_matter` module
 [here](https://deno.land/std@0.208.0/front_matter/mod.ts).
 
 You can refer to my
 [`utils/posts.ts`](https://github.com/mrkjdy/website/blob/62f0d83053a26004732c04be3cbe03094ae00ffd/utils/posts.ts)
-to see how I extract frontmatter from Markdown file. It involves just a few
+to see how I extract frontmatter from Markdown files. It involves just a few
 modifications to the example code above.
 
 ## Improvements
@@ -245,7 +244,7 @@ modifications to the example code above.
 I hope you've found this guide useful! It should help you get started with Fresh
 and understand the basic design of a blog. You will need to make some important
 improvements such as
-[setting up styles](https://fresh.deno.dev/docs/examples/migrating-to-tailwind),
+[setting up styles](https://fresh.deno.dev/docs/examples/migrating-to-tailwind)
 and adding things like a home page and a list of posts. You can take a look at
 the code of my blog, or if you like it, you can fork it and customize it to your
 needs.
