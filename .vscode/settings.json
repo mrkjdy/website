@@ -28,5 +28,8 @@
   },
   "markdown.extension.toc.orderedList": true,
   "deno.enable": true,
-  "deno.lint": true
+  "deno.lint": true,
+  "grammarly.files.include": [
+    "**/*.md"
+  ]
 }
