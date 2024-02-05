@@ -46,7 +46,7 @@ Minutes to read: ${post.minutesToRead}`;
           </span>
         </p>
         <br />
-        <TableOfContents markdown={post.markdown} />
+        <TableOfContents headings={post.headings} />
         <br />
         <Markdown html={post.html} />
       </article>

@@ -5,6 +5,8 @@ import { Parser } from "$std/front_matter/mod.ts";
 import { isRecord } from "./helper.ts";
 import { customRender } from "../components/Markdown.tsx";
 import { IS_BROWSER } from "$fresh/runtime.ts";
+import { Heading } from "../components/TableOfContents.tsx";
+import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm.ts";
 
 type PostAttributes = {
   title: string;
@@ -62,6 +64,7 @@ export type Post = Omit<PostAttributes, "date"> & {
   date: Date;
   formattedDate: string;
   markdown: string;
+  headings: Heading[];
 };
 
 const createPost = (
@@ -73,11 +76,7 @@ const createPost = (
   const [html, markdown] = customRender(templateMarkdown, {
     assetPrefix: `${href}/`,
   });
-  const numberOfWords = html
-    .replace(/<(?:.|\n)*?>/gm, "") // Remove html tags
-    .trim() // Remove whitespace from beginning and end
-    .split(/\s+/) // Split text on whitespace into an array of words
-    .length;
+  const numberOfWords = markdown.split(/\s+/).length;
   const wordsPerMinute = 200;
   const minutesToRead = Math.ceil(numberOfWords / wordsPerMinute);
   const date = new Date(postAttrs.date);
@@ -87,6 +86,26 @@ const createPost = (
     year: "numeric",
   });
   const cover = `/images/${postPath}/${postAttrs.cover}`;
+  const domParser = new DOMParser();
+  const dom = domParser.parseFromString(html, "text/html");
+  if (dom === null) {
+    throw new Error("Unable to create dom");
+  }
+  const headingElements = dom.querySelectorAll(
+    "h1, h2, h3, h4, h5, h6",
+  ) as unknown as NodeListOf<HTMLHeadingElement>;
+  const headings = [...headingElements].map((headingElement): Heading => {
+    const text = headingElement.textContent;
+    if (text === null) {
+      throw new Error("Missing text content in heading");
+    }
+    const level = Number.parseInt(headingElement.tagName.slice(1), 10);
+    const href = headingElement.querySelector("a")?.getAttribute("href");
+    if (typeof href !== "string") {
+      throw new Error("Missing href for heading element");
+    }
+    return { text, level, href };
+  });
   return {
     ...postAttrs,
     href,
@@ -96,6 +115,7 @@ const createPost = (
     cover, // Overwrite the relative coverPhoto path
     formattedDate,
     markdown,
+    headings,
   };
 };
 
