@@ -1,14 +1,13 @@
 ---
 title: Pattern Matching
-date: 2/3/2024
+date: 3/22/2024
 tags:
   - typescript
   - c
   - haskell
   - rust
 description: TODO
-cover: cover.webp
-coverAltText: TODO
+cover: shape-sorter.webp
 ---
 
 ## What is pattern matching and why do I need it?
@@ -945,10 +944,17 @@ const matchObj = <
 
 ### TC39 Proposal
 
-https://github.com/tc39/proposal-pattern-matching
+TC39 is a Technical Committee working on the standard for JavaScript. They
+propose, review and approve new features for the language that later get
+implemented runtimes. There's a proposal for adding pattern matching to
+JavaScript itself. I highly recommend taking a look at
+[the proposal](https://github.com/tc39/proposal-pattern-matching).
+
+The proposal itself is still in it's early stages, so it might be quite a while
+before we see first-class support in the wild.
 
 ## Conclusion
 
 Hopefully, through these examples, you've gained some insight into each of the
-languages I went over, and why I feel exhaustive pattern matching is
-~~important~~ absolutely necessary to program quickly and effectively today.
+languages I went over, and why I feel exhaustive pattern matching is an
+~~important~~ absolutely necessary modern programming feature.
