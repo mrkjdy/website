@@ -625,7 +625,7 @@ fn sum_area(shapes: &[Shape]) -> f64 {
 fn main() {
   let shapes = [
     Shape::Circle(Circle { r: 1.0 }),
-    Shape::Rectangle(Rectangle { w: 2.0, h: 2.0 }),
+    Shape::Rectangle(Rectangle { w: 2.0, h: 3.0 }),
     Shape::Triangle(Triangle {
       a: 3.0,
       b: 4.0,
@@ -650,7 +650,7 @@ $ cargo run
    Compiling website v0.1.0 (/workspaces/website)
     Finished dev [unoptimized + debuginfo] target(s) in 5.20s
      Running `target/debug/website`
-13.141592653589793
+15.141592653589793
 ```
 
 Looking good so far!
