@@ -36,14 +36,14 @@ We can create some types to represent our shapes like this:
 typedef enum {
   CIRCLE,
   RECTANGLE,
-  triangle,
+  TRIANGLE
 } ShapeType;
 
-// Allows us to hold different shapes in the same memory location
+// Allows us to hold different kinds of shapes the same memory location
 typedef union {
-  struct { double radius; }; // a circle
-  struct { double width; double height; }; // a rectangle
-  struct { double sideA; double sideB; double sideC; }; // a triangle
+  struct { double r; }; // a circle
+  struct { double w; double h; }; // a rectangle
+  struct { double a; double b; double c; }; // a triangle
 } Dimensions;
 
 // A box containing a shape with its members and a type field indicating
@@ -61,17 +61,15 @@ Now let's write a function to calculate the area of a given shape:
 
 // ...
 
-#define PI 3.14159265358979323846
-
 double shape_area(Shape shape) {
   Dimensions ds = shape.dimensions;
   if (shape.type == CIRCLE) {
-    return (PI * ds.radius * ds.radius);
+    return M_PI * ds.r * ds.r;
   } else if (shape.type == RECTANGLE) {
-    return (ds.width * ds.height);
+    return ds.w * ds.h;
   } else {
-    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+    double s = (ds.a + ds.b + ds.c) / 2;
+    return sqrt(s * (s - ds.a) * (s - ds.b) * (s - ds.c));
   }
 }
 ```
@@ -89,27 +87,27 @@ int main() {
   
   // Define the shapes
 
-  // Area should be PI
+  // Area should be pi
   shapes[0].type = CIRCLE;
-  shapes[0].dimensions.radius = 1.0;
+  shapes[0].dimensions.r = 1.0;
 
   // Area should be 6.0
   shapes[1].type = RECTANGLE;
-  shapes[1].dimensions.width = 2.0;
-  shapes[1].dimensions.height = 3.0;
+  shapes[1].dimensions.w = 2.0;
+  shapes[1].dimensions.h = 3.0;
 
   // Area should be 6.0
-  shapes[2].type = triangle;
-  shapes[2].dimensions.sideA = 3.0;
-  shapes[2].dimensions.sideB = 4.0;
-  shapes[2].dimensions.sideC = 5.0;
+  shapes[2].type = TRIANGLE;
+  shapes[2].dimensions.a = 3.0;
+  shapes[2].dimensions.b = 4.0;
+  shapes[2].dimensions.c = 5.0;
 
   double totalArea = 0;
   for (size_t i = 0; i < size; i++) {
     totalArea += shape_area(shapes[i]);
   }
 
-  // Total area should be PI + 6.0 + 6.0 = 15.14...
+  // Total area should be pi + 6.0 + 6.0 = 15.14...
   printf("Total area: %f\n", totalArea);
 
   return 0;
@@ -137,10 +135,10 @@ typedef enum {
 } ShapeType;
 
 typedef union {
-  struct { double radius; }; // a circle
-  struct { double width; double height; }; // a rectangle
-  struct { double sideA; double sideB; double sideC; }; // a triangle
-  struct { double paraA; double paraB; double theta; }; // a parallelogram
+  struct { double r; }; // a circle
+  struct { double w; double h; }; // a rectangle
+  struct { double a; double b; double c; }; // a triangle
+  struct { double x; double y; double t; }; // a parallelogram
 } Dimensions;
 
 // ...
@@ -151,33 +149,33 @@ int main() {
   
   // Define the shapes
 
-  // Area should be PI
+  // Area should be pi
   shapes[0].type = CIRCLE;
-  shapes[0].dimensions.radius = 1.0;
+  shapes[0].dimensions.r = 1.0;
 
   // Area should be 6.0
   shapes[1].type = RECTANGLE;
-  shapes[1].dimensions.width = 2.0;
-  shapes[1].dimensions.height = 3.0;
+  shapes[1].dimensions.w = 2.0;
+  shapes[1].dimensions.h = 3.0;
 
   // Area should be 6.0
   shapes[2].type = triangle;
-  shapes[2].dimensions.sideA = 3.0;
-  shapes[2].dimensions.sideB = 4.0;
-  shapes[2].dimensions.sideC = 5.0;
+  shapes[2].dimensions.a = 3.0;
+  shapes[2].dimensions.b = 4.0;
+  shapes[2].dimensions.c = 5.0;
 
   // Area should be 6.0
   shapes[3].type = PARALLELOGRAM;
-  shapes[3].dimensions.paraA = 2.0;
-  shapes[3].dimensions.paraB = 3.0;
-  shapes[3].dimensions.theta = PI / 2;
+  shapes[3].dimensions.x = 2.0;
+  shapes[3].dimensions.y = 3.0;
+  shapes[3].dimensions.t = M_PI / 2;
 
   double totalArea = 0;
   for (size_t i = 0; i < size; i++) {
     totalArea += shape_area(shapes[i]);
   }
 
-  // Total area should be PI + 6.0 + 6.0 + 6.0 = 21.14...
+  // Total area should be pi + 6.0 + 6.0 + 6.0 = 21.14...
   printf("Total area: %f\n", totalArea);
 
   return 0;
@@ -211,15 +209,15 @@ Let's modify the code to get a closer look:
 double shape_area(Shape shape) {
   Dimensions ds = shape.dimensions;
   if (shape.type == CIRCLE) {
-    return (PI * ds.radius * ds.radius);
+    return M_PI * ds.r * ds.r;
   } else if (shape.type == RECTANGLE) {
-    return (ds.width * ds.height);
+    return ds.w * ds.h;
   } else {
-    printf("sideA: %f\n", ds.sideA);
-    printf("sideB: %f\n", ds.sideB);
-    printf("sideC: %f\n", ds.sideC);
-    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+    printf("a: %f\n", ds.a);
+    printf("b: %f\n", ds.b);
+    printf("c: %f\n", ds.c);
+    double s = (ds.a + ds.b + ds.c) / 2;
+    return sqrt(s * (s - ds.a) * (s - ds.b) * (s - ds.c));
   }
 }
 ```
@@ -229,12 +227,12 @@ And we can run the program again:
 ```text
 $ gcc shapes.c -o shapes -lm
 $ ./shapes
-sideA: 3.000000
-sideB: 4.000000
-sideC: 5.000000
-sideA: 2.000000
-sideB: 3.000000
-sideC: 1.570796
+a: 3.000000
+b: 4.000000
+c: 5.000000
+a: 2.000000
+b: 3.000000
+c: 1.570796
 Total area: 16.579133
 ```
 
@@ -261,12 +259,12 @@ it's ever reached:
 double shape_area(Shape shape) {
   Dimensions ds = shape.dimensions;
   if (shape.type == CIRCLE) {
-    return (PI * ds.radius * ds.radius);
+    return (M_PI * ds.r * ds.r);
   } else if (shape.type == RECTANGLE) {
-    return (ds.width * ds.height);
+    return (ds.w * ds.h);
   } else if (shape.type == TRIANGLE) {
-    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+    double s = (ds.a + ds.b + ds.c) / 2;
+    return sqrt(s * (s - ds.a) * (s - ds.b) * (s - ds.c));
   } else {
     printf("Missing handler for shape with type: %d\n", shape.type);
     exit(1);
@@ -292,12 +290,12 @@ shapes. The `if`/`else if`/`else` syntax can become a mess to read and maintain:
 double shape_area(Shape shape) {
   Dimensions ds = shape.dimensions;
   if (shape.type == CIRCLE) {
-    return (PI * ds.radius * ds.radius);
+    return M_PI * ds.r * ds.r;
   } else if (shape.type == RECTANGLE) {
-    return (ds.width * ds.height);
+    return ds.w * ds.h;
   } else if (shape.type == TRIANGLE) {
-    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+    double s = (ds.a + ds.b + ds.c) / 2;
+    return sqrt(s * (s - ds.a) * (s - ds.b) * (s - ds.c));
   } else if (shape.type == ...) {
     return ...
   } else if (shape.type == ...) {
@@ -319,7 +317,7 @@ double shape_area(Shape shape) {
 // ...
 ```
 
-One way to improve the readability is to just use `if` statements:
+One way to improve the readability slightly is to just use `if` statements:
 
 ```c
 // ...
@@ -327,14 +325,14 @@ One way to improve the readability is to just use `if` statements:
 double shape_area(Shape shape) {
   Dimensions ds = shape.dimensions;
   if (shape.type == CIRCLE) {
-    return (PI * ds.radius * ds.radius);
+    return M_PI * ds.r * ds.r;
   }
   if (shape.type == RECTANGLE) {
-    return (ds.width * ds.height);
+    return ds.w * ds.h;
   }
   if (shape.type == TRIANGLE) {
-    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+    double s = (ds.a + ds.b + ds.c) / 2;
+    return sqrt(s * (s - ds.a) * (s - ds.b) * (s - ds.c));
   }
   if (shape.type == ...) {
     return ...;
@@ -361,7 +359,8 @@ double shape_area(Shape shape) {
 // ...
 ```
 
-Another option is to use `switch`/`case` which may be slightly easier to read:
+Another option is to use `switch`/`case` which may still be a bit easier to
+read:
 
 ```c
 // ...
@@ -370,12 +369,12 @@ double shape_area(Shape shape) {
   Dimensions ds = shape.dimensions;
   switch (shape.type) {
     case CIRCLE:
-      return PI * ds.radius * ds.radius;
+      return M_PI * ds.r * ds.r;
     case RECTANGLE:
-      return ds.width * ds.height;
+      return ds.w * ds.h;
     case TRIANGLE:
-      double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-      return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+      double s = (ds.a + ds.b + ds.c) / 2;
+      return sqrt(s * (s - ds.a) * (s - ds.b) * (s - ds.c));
     case ...:
       return ...;
     default:
