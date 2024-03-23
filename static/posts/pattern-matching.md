@@ -54,7 +54,7 @@ typedef struct {
 } Shape;
 ```
 
-Now let's write the function using standard `if`/`else` statements:
+Now let's write a function to calculate the area of a given shape:
 
 ```c
 #include <math.h>
@@ -63,21 +63,16 @@ Now let's write the function using standard `if`/`else` statements:
 
 #define PI 3.14159265358979323846
 
-double sum_areas(Shape shapes[], size_t size) {
-  double area = 0;
-  for (size_t i = 0; i < size; i++) {
-    Shape shape = shapes[i];
-    Dimensions ds = shape.dimensions;
-    if (shape.type == CIRCLE) {
-      area += (PI * ds.radius * ds.radius);
-    } else if (shape.type == RECTANGLE) {
-      area += (ds.width * ds.height);
-    } else {
-      double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-      area += sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
-    }
+double shape_area(Shape shape) {
+  Dimensions ds = shape.dimensions;
+  if (shape.type == CIRCLE) {
+    return (PI * ds.radius * ds.radius);
+  } else if (shape.type == RECTANGLE) {
+    return (ds.width * ds.height);
+  } else {
+    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
+    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
   }
-  return area;
 }
 ```
 
@@ -109,7 +104,10 @@ int main() {
   shapes[2].dimensions.sideB = 4.0;
   shapes[2].dimensions.sideC = 5.0;
 
-  double totalArea = sum_areas(shapes, size);
+  double totalArea = 0;
+  for (size_t i = 0; i < size; i++) {
+    totalArea += shape_area(shapes[i]);
+  }
 
   // Total area should be PI + 6.0 + 6.0 = 15.14...
   printf("Total area: %f\n", totalArea);
@@ -174,7 +172,10 @@ int main() {
   shapes[3].dimensions.paraB = 3.0;
   shapes[3].dimensions.theta = PI / 2;
 
-  double totalArea = sum_areas(shapes, size);
+  double totalArea = 0;
+  for (size_t i = 0; i < size; i++) {
+    totalArea += shape_area(shapes[i]);
+  }
 
   // Total area should be PI + 6.0 + 6.0 + 6.0 = 21.14...
   printf("Total area: %f\n", totalArea);
@@ -201,30 +202,25 @@ happening here is the worst kind of bug. Aside from manual validation, there's
 no indication that there is anything wrong.
 
 The problem is that we forgot to include a branch to calculate the area of a
-parallelogram in `sum_areas()`. The parallelogram is being treated as if it were
-a triangle.
+parallelogram in `shape_area()`. The parallelogram is being treated as if it
+were a triangle.
 
 Let's modify the code to get a closer look:
 
 ```c
-double sum_areas(Shape shapes[], size_t size) {
-  double area = 0;
-  for (size_t i = 0; i < size; i++) {
-    Shape shape = shapes[i];
-    Dimensions ds = shape.dimensions;
-    if (shape.type == CIRCLE) {
-      area += (PI * ds.radius * ds.radius);
-    } else if (shape.type == RECTANGLE) {
-      area += (ds.width * ds.height);
-    } else {
-      printf("sideA: %f\n", ds.sideA);
-      printf("sideB: %f\n", ds.sideB);
-      printf("sideC: %f\n", ds.sideC);
-      double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-      area += sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
-    }
+double shape_area(Shape shape) {
+  Dimensions ds = shape.dimensions;
+  if (shape.type == CIRCLE) {
+    return (PI * ds.radius * ds.radius);
+  } else if (shape.type == RECTANGLE) {
+    return (ds.width * ds.height);
+  } else {
+    printf("sideA: %f\n", ds.sideA);
+    printf("sideB: %f\n", ds.sideB);
+    printf("sideC: %f\n", ds.sideC);
+    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
+    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
   }
-  return area;
 }
 ```
 
@@ -262,24 +258,19 @@ it's ever reached:
 
 // ...
 
-double sum_areas(Shape shapes[], size_t size) {
-  double area = 0;
-  for (size_t i = 0; i < size; i++) {
-    Shape shape = shapes[i];
-    Dimensions ds = shape.dimensions;
-    if (shape.type == CIRCLE) {
-      area += (PI * ds.radius * ds.radius);
-    } else if (shape.type == RECTANGLE) {
-      area += (ds.width * ds.height);
-    } else if (shape.type == triangle) {
-      double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-      area += sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
-    } else {
-      printf("Missing sum handler for shape with type: %d\n", shape.type);
-      exit(1);
-    }
+double shape_area(Shape shape) {
+  Dimensions ds = shape.dimensions;
+  if (shape.type == CIRCLE) {
+    return (PI * ds.radius * ds.radius);
+  } else if (shape.type == RECTANGLE) {
+    return (ds.width * ds.height);
+  } else if (shape.type == TRIANGLE) {
+    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
+    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+  } else {
+    printf("Missing handler for shape with type: %d\n", shape.type);
+    exit(1);
   }
-  return area;
 }
 
 // ...
@@ -296,76 +287,112 @@ There's another problem, let's say our program needs to support many more
 shapes. The `if`/`else if`/`else` syntax can become a mess to read and maintain:
 
 ```c
-double sum_areas(Shape shapes[], size_t size) {
-  double area = 0;
-  for (size_t i = 0; i < size; i++) {
-    Shape shape = shapes[i];
-    Dimensions ds = shape.dimensions;
-    if (shape.type == CIRCLE) {
-      area += (PI * ds.radius * ds.radius);
-    } else if (shape.type == RECTANGLE) {
-      area += (ds.width * ds.height);
-    } else if (shape.type == triangle) {
-      double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-      area += sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
-    } else if (shape.type == ...) {
-      ...
-    } else if (shape.type == ...) {
-      ...
-    } else if (shape.type == ...) {
-      ...
-    } else if (shape.type == ...) {
-      ...
-    } else if (shape.type == ...) {
-      ...
-    } else if (shape.type == ...) {
-      ...
-    } else {
-      ...
-    }
+// ...
+
+double shape_area(Shape shape) {
+  Dimensions ds = shape.dimensions;
+  if (shape.type == CIRCLE) {
+    return (PI * ds.radius * ds.radius);
+  } else if (shape.type == RECTANGLE) {
+    return (ds.width * ds.height);
+  } else if (shape.type == TRIANGLE) {
+    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
+    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+  } else if (shape.type == ...) {
+    return ...
+  } else if (shape.type == ...) {
+    return ...
+  } else if (shape.type == ...) {
+    return ...
+  } else if (shape.type == ...) {
+    return ...
+  } else if (shape.type == ...) {
+    return ...
+  } else if (shape.type == ...) {
+    return ...
+  } else {
+    printf("Missing handler for shape with type: %d\n", shape.type);
+    exit(1);
   }
-  return area;
 }
+
+// ...
 ```
 
-C does offer a different syntax for this situation called `switch`/`case` which
-may be slightly easier to read:
+One way to improve the readability is to just use `if` statements:
 
 ```c
-double sum_areas(Shape shapes[], size_t size) {
-  double area = 0;
-  for (size_t i = 0; i < size; i++) {
-    Shape shape = shapes[i];
-    Dimensions ds = shape.dimensions;
-    switch (shape.type) {
-      case CIRCLE:
-        area += (PI * ds.radius * ds.radius);
-        break;
-      case RECTANGLE:
-        area += (ds.width * ds.height);
-        break;
-      case triangle:
-        double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
-        area += sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
-        break;
-      case PARALLELOGRAM:
-        // ...
-        break;
-      default: // This corresponds to the final else
-        // ...
-    }
+// ...
+
+double shape_area(Shape shape) {
+  Dimensions ds = shape.dimensions;
+  if (shape.type == CIRCLE) {
+    return (PI * ds.radius * ds.radius);
   }
-  return area;
+  if (shape.type == RECTANGLE) {
+    return (ds.width * ds.height);
+  }
+  if (shape.type == TRIANGLE) {
+    double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
+    return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+  }
+  if (shape.type == ...) {
+    return ...;
+  }
+  if (shape.type == ...) {
+    return ...;
+  }
+  if (shape.type == ...) {
+    return ...;
+  }
+  if (shape.type == ...) {
+    return ...;
+  }
+  if (shape.type == ...) {
+    return ...;
+  }
+  if (shape.type == ...) {
+    return ...;
+  }
+  printf("Missing handler for shape with type: %d\n", shape.type);
+  exit(1);
 }
+
+// ...
 ```
 
-However, I'd argue that it doesn't solve any of the problems we're dealing with.
-It gives you another way to shoot yourself in the foot: If you or someone else
-forgets to add the necessary break statement, then the calculations may be
+Another option is to use `switch`/`case` which may be slightly easier to read:
+
+```c
+// ...
+
+double shape_area(Shape shape) {
+  Dimensions ds = shape.dimensions;
+  switch (shape.type) {
+    case CIRCLE:
+      return PI * ds.radius * ds.radius;
+    case RECTANGLE:
+      return ds.width * ds.height;
+    case TRIANGLE:
+      double s = (ds.sideA + ds.sideB + ds.sideC) / 2;
+      return sqrt(s * (s - ds.sideA) * (s - ds.sideB) * (s - ds.sideC));
+    case ...:
+      return ...;
+    default:
+      printf("Missing handler for shape with type: %d\n", shape.type);
+      exit(1);
+  }
+}
+
+// ...
+```
+
+However, I'd argue that it doesn't solve the main problem we're dealing with,
+and it gives you another way to shoot yourself in the foot: If you or someone
+else forgets to return or break in a case, then the calculations may be
 incorrect again, leading to another difficult-to-debug problem. So now, in each
-place in your code where you may be processing shapes like this, you have to
-remember to add handlers when new shapes are added and always remember to add
-break statements.
+place where you may be processing shapes like this, you have to remember to add
+handlers when new shapes are added and always remember to return or break.
 
 These problems aren't just limited to C.
 [Languages that descend from C](https://en.wikipedia.org/wiki/List_of_C-family_programming_languages)
@@ -415,10 +442,9 @@ data Shape
   | Rectangle Float Float -- width, height
   | Triangle Float Float Float -- side a, side b, side c
 
-sumArea [] = 0
-sumArea (Circle r : shapes) = (pi * (r ** 2)) + sumArea shapes
-sumArea (Rectangle w h : shapes) = (w * h) + sumArea shapes
-sumArea (Triangle a b c : shapes) = sqrt (s * (s - a) * (s - b) * (s - c)) + sumArea shapes
+shapeArea (Circle r) = pi * (r ** 2)
+shapeArea (Rectangle w h) = w * h
+shapeArea (Triangle a b c) = sqrt (s * (s - a) * (s - b) * (s - c))
   where
     s = (a + b + c) / 2
 
@@ -429,7 +455,7 @@ shapes =
   ]
 
 main = do
-  print (sumArea shapes)
+  print (sum (map shapeArea shapes))
 ```
 
 Also pretty short and sweet! You can see we have a data type called `Shape` with
@@ -489,7 +515,7 @@ Let's try running it anyway:
 
 ```text
 $ ./shape
-shape: shape.hs:(12,1)-(17,23): Non-exhaustive patterns in function sumArea
+shape: shape.hs:(9,1)-(13,23): Non-exhaustive patterns in function shapeArea
 ```
 
 Huh. Well, at least it told us what's wrong and where it's wrong. But shouldn't
@@ -511,13 +537,13 @@ And now when we compile the code we get this:
 $ ghc shape.hs
 [1 of 2] Compiling Main      ( shape.hs, shape.o ) [Source file changed]
 
-shape.hs:12:1: warning: [-Wincomplete-patterns]
+shape.hs:11:1: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
-    In an equation for ‘sumArea’:
-        Patterns of type ‘[Shape]’ not matched: ((Parallelogram _ _ _):_)
+    In an equation for ‘shapeArea’:
+        Patterns of type ‘Shape’ not matched: Parallelogram _ _ _
    |
-12 | sumArea [] = 0
-   | ^^^^^^^^^^^^^^...
+11 | shapeArea (Circle r) = pi * (r ** 2)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
 [2 of 2] Linking shape [Objects changed]
 ```
 
@@ -541,18 +567,18 @@ Now when we compile it fails at the compile step:
 $ ghc shape.hs
 [1 of 2] Compiling Main      ( shape.hs, shape.o ) [Source file changed]
 
-shape.hs:13:1: error: [-Wincomplete-patterns, -Werror=incomplete-patterns]
+shape.hs:12:1: error: [-Wincomplete-patterns, -Werror=incomplete-patterns]
     Pattern match(es) are non-exhaustive
-    In an equation for ‘sumArea’:
-        Patterns of type ‘[Shape]’ not matched: ((Parallelogram _ _ _):_)
+    In an equation for ‘shapeArea’:
+        Patterns of type ‘Shape’ not matched: Parallelogram _ _ _
    |
-13 | sumArea [] = 0
-   | ^^^^^^^^^^^^^^...
+12 | shapeArea (Circle r) = pi * (r ** 2)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
 ```
 
 Not ideal. But at least we have the option. Haskell has been around since 1990,
-this is probably just a result of not wanting to introduce a breaking behavior
-into the compiler.
+this is probably just a result of the maintainers not wanting to introduce a
+breaking behavior into the compiler.
 
 There have been many new languages introduced since then, including some with
 exhaustiveness checks enabled by default!
@@ -589,49 +615,48 @@ Now let's jump right in and move on to the shapes example:
 use std::f64::consts::PI;
 
 struct Circle {
-  r: f64,
+    r: f64,
 }
 
 struct Rectangle {
-  w: f64,
-  h: f64,
+    w: f64,
+    h: f64,
 }
 
 struct Triangle {
-  a: f64,
-  b: f64,
-  c: f64,
+    a: f64,
+    b: f64,
+    c: f64,
 }
 
 enum Shape {
-  Circle(Circle),
-  Rectangle(Rectangle),
-  Triangle(Triangle),
+    Circle(Circle),
+    Rectangle(Rectangle),
+    Triangle(Triangle),
 }
 
-fn sum_area(shapes: &[Shape]) -> f64 {
-  match shapes {
-    [] => 0.0,
-    [Shape::Circle(Circle { r }), tail @ ..] => (PI * r * r) + sum_area(tail),
-    [Shape::Rectangle(Rectangle { w, h }), tail @ ..] => (w * h) + sum_area(tail),
-    [Shape::Triangle(Triangle { a, b, c }), tail @ ..] => {
-      let s = (a + b + c) / 2.0;
-      f64::sqrt(s * (s - a) * (s - b) * (s - c)) + sum_area(tail)
+fn shape_area(shape: Shape) -> f64 {
+    match shape {
+        Shape::Circle(Circle { r }) => PI * r * r,
+        Shape::Rectangle(Rectangle { w, h }) => w * h,
+        Shape::Triangle(Triangle { a, b, c }) => {
+            let s = (a + b + c) / 2.0;
+            f64::sqrt(s * (s - a) * (s - b) * (s - c))
+        }
     }
-  }
 }
 
 fn main() {
-  let shapes = [
-    Shape::Circle(Circle { r: 1.0 }),
-    Shape::Rectangle(Rectangle { w: 2.0, h: 3.0 }),
-    Shape::Triangle(Triangle {
-      a: 3.0,
-      b: 4.0,
-      c: 5.0,
-    }),
-  ];
-  println!("{}", sum_area(&shapes))
+    let shapes = [
+        Shape::Circle(Circle { r: 1.0 }),
+        Shape::Rectangle(Rectangle { w: 2.0, h: 3.0 }),
+        Shape::Triangle(Triangle {
+            a: 3.0,
+            b: 4.0,
+            c: 5.0,
+        }),
+    ];
+    println!("{}", shapes.map(shape_area).iter().sum::<f64>())
 }
 ```
 
@@ -639,15 +664,15 @@ We have a few structs representing our shapes, an enum that allows us to store
 shapes in the same location, a function for calculating the total area of all
 the shapes, and a main function for testing it out.
 
-Looks pretty good! It's a little bit more verbose, and `tail @ ..` looks a
-little weird, but it works!
+Looks pretty good! It's a little bit more verbose, and some of the syntax looks
+a little weird, but it works!
 
 Let's compile and run it now:
 
 ```text
 $ cargo run
    Compiling website v0.1.0 (/workspaces/website)
-    Finished dev [unoptimized + debuginfo] target(s) in 5.20s
+    Finished dev [unoptimized + debuginfo] target(s) in 1.57s
      Running `target/debug/website`
 15.141592653589793
 ```
@@ -680,19 +705,27 @@ Now if we try to compile and run it:
 ```text
 $ cargo run
    Compiling website v0.1.0 (/workspaces/website)
-error[E0004]: non-exhaustive patterns: `&[Shape::Parallelogram(_), ..]`
-not covered
-  --> src/main.rs:32:9
+error[E0004]: non-exhaustive patterns: `Shape::Parallelogram(_)` not
+covered
+  --> src/main.rs:32:11
    |
-32 |   match shapes {
-   |         ^^^^^^ pattern `&[Shape::Parallelogram(_), ..]` not covered
+32 |     match shape {
+   |           ^^^^^ pattern `Shape::Parallelogram(_)` not covered
    |
-   = note: the matched value is of type `&[Shape]`
+note: `Shape` defined here
+  --> src/main.rs:24:6
+   |
+24 | enum Shape {
+   |      ^^^^^
+...
+28 |     Parallelogram(Parallelogram),
+   |     ------------- not covered
+   = note: the matched value is of type `Shape`
 help: ensure that all possible cases are being handled by adding a match
 arm with a wildcard pattern or an explicit pattern as shown
    |
-39 ~     },
-40 +     &[Shape::Parallelogram(_), ..] => todo!()
+38 ~         },
+39 +         Shape::Parallelogram(_) => todo!()
    |
 
 For more information about this error, try `rustc --explain E0004`.
@@ -733,26 +766,19 @@ type Shape =
   | Rectangle
   | Triangle;
 
-const sumAreas = (shapes: Shape[]) => {
-  let area = 0;
-  for (const shape of shapes) {
-    switch (shape.type) {
-      case "circle":
-        area += Math.PI * shape.r * shape.r;
-        break;
-      case "rectangle":
-        area += shape.w * shape.h;
-        break;
-      case "triangle": {
-        const s = (shape.a + shape.b + shape.c) / 2;
-        area += Math.sqrt(s * (s - shape.a) * (s - shape.b) * (s - shape.c));
-        break;
-      }
-      default:
-        assertNever(shape);
+const shapeArea = (shape: Shape) => {
+  switch (shape.type) {
+    case "circle":
+      return Math.PI * shape.r * shape.r;
+    case "rectangle":
+      return shape.w * shape.h;
+    case "triangle": {
+      const s = (shape.a + shape.b + shape.c) / 2;
+      return Math.sqrt(s * (s - shape.a) * (s - shape.b) * (s - shape.c));
     }
+    default:
+      assertNever(shape);
   }
-  return area;
 };
 ```
 
@@ -778,9 +804,9 @@ type Shape =
 $ deno check test.ts
 Check file:///workspaces/website/test.ts
 error: TS2345 [ERROR]: Argument of type 'Parallelogram' is not assignable to parameter of type 'never'.
-        assertNever(shape);
-                    ~~~~~
-    at file:///workspaces/website/test.ts:35:21
+      assertNever(shape);
+                  ~~~~~
+    at file:///workspaces/website/test.ts:30:19
 ```
 
 While not quite as helpful as the error in Rust, this at least tells us that it
@@ -810,20 +836,15 @@ type Shape =
   | Rectangle
   | Triangle;
 
-const sumAreas = (shapes: Shape[]) => {
-  let area = 0;
-  for (const shape of shapes) {
-    area += match(shape)
-      .with({ type: "circle" }, ({ r }) => Math.PI * r * r)
-      .with({ type: "rectangle" }, ({ w, h }) => w * h)
-      .with({ type: "triangle" }, ({ a, b, c }) => {
-        const s = (a + b + c) / 2;
-        return Math.sqrt(s * (s - a) * (s - b) * (s - c));
-      })
-      .exhaustive();
-  }
-  return area;
-};
+const shapeArea = (shape: Shape) =>
+  match(shape)
+    .with({ type: "circle" }, ({ r }) => Math.PI * r * r)
+    .with({ type: "rectangle" }, ({ w, h }) => w * h)
+    .with({ type: "triangle" }, ({ a, b, c }) => {
+      const s = (a + b + c) / 2;
+      return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+    })
+    .exhaustive();
 ```
 
 Nice and concise!
@@ -849,9 +870,9 @@ $ deno check test.ts
 Check file:///workspaces/website/test.ts
 error: TS2349 [ERROR]: This expression is not callable.
   Type 'NonExhaustiveError<Parallelogram>' has no call signatures.
-      .exhaustive();
-       ~~~~~~~~~~
-    at file:///workspaces/website/test.ts:27:8
+    .exhaustive();
+     ~~~~~~~~~~
+    at file:///workspaces/website/test.ts:25:6
 ```
 
 While this is not super helpful, the tooltip for `.exhaustive()` gives a clear
@@ -950,7 +971,7 @@ implemented runtimes. There's a proposal for adding pattern matching to
 JavaScript itself. I highly recommend taking a look at
 [the proposal](https://github.com/tc39/proposal-pattern-matching).
 
-The proposal itself is still in it's early stages, so it might be quite a while
+The proposal itself is still in its early stages, so it might be quite a while
 before we see first-class support in the wild.
 
 ## Conclusion
