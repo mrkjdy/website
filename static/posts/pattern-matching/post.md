@@ -2,12 +2,14 @@
 title: Pattern Matching
 date: 3/22/2024
 tags:
+  - programming
   - typescript
   - c
   - haskell
   - rust
 description: TODO
-cover: shape-sorter.webp
+cover:
+  name: shape-sorter.webp
 ---
 
 ## What is pattern matching and why do I need it?
@@ -39,7 +41,8 @@ typedef enum {
   TRIANGLE
 } ShapeType;
 
-// Allows us to hold different kinds of shapes the same memory location
+// Allows us to hold different kinds of shapes in the same memory
+// location
 typedef union {
   struct { double r; }; // a circle
   struct { double w; double h; }; // a rectangle
@@ -195,7 +198,7 @@ There weren't any compile errors, everything should be fine right?
 
 Wrong. The C compiler will compile this without complaint. It will even run the
 program for you without throwing an error or
-[seg faulting](https://en.wikipedia.org/wiki/Segmentation_fault)! What's
+[segfaulting](https://en.wikipedia.org/wiki/Segmentation_fault)! What's
 happening here is the worst kind of bug. Aside from manual validation, there's
 no indication that there is anything wrong.
 
@@ -781,7 +784,7 @@ const shapeArea = (shape: Shape) => {
 };
 ```
 
-The compiler with properly infer the types of `shape` within each case
+The compiler will properly infer the types of `shape` within each case
 statement, and if another variant is added to `Shape`, then we'll get a compile
 time error via `assertNever()`:
 

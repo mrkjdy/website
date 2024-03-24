@@ -30,14 +30,17 @@ Minutes to read: ${post.minutesToRead}`;
       <Head>
         <meta name="description" content={metaDescription} />
       </Head>
-      <article class="w-full max-w-[min(65ch,calc(100%-2rem))]">
+      <article class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
         <h1 class="text-4xl font-bold">{post.title}</h1>
-        <br />
-        <img src={asset(post.cover)} alt={post.coverAltText ?? "Cover"} />
-        {post.coverAltText !== undefined && (
-          <p class="italic text-sm">{post.coverAltText}</p>
+        <img
+          src={asset(post.cover.staticPath)}
+          alt={post.cover.alt}
+          width={post.cover?.width}
+          height={post.cover?.height}
+        />
+        {post.cover.caption !== undefined && (
+          <p class="italic text-sm">{post.cover.caption}</p>
         )}
-        <br />
         <p class="flex space-x-4">
           <span>{post.formattedDate}</span>
           <span>{`${post.minutesToRead} minute read`}</span>
@@ -45,9 +48,7 @@ Minutes to read: ${post.minutesToRead}`;
             <PostTagLinks tags={post.tags} />
           </span>
         </p>
-        <br />
         <TableOfContents headings={post.headings} />
-        <br />
         <Markdown html={post.html} />
       </article>
     </>

@@ -5,6 +5,7 @@
   "files.autoSave": "onWindowChange",
   "deno.unstable": false,
   "deno.importMap": "./deno.json",
+  "C_Cpp.formatting": "clangFormat",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },

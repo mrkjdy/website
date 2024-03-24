@@ -2,11 +2,13 @@
 title: How to Build a Blog
 date: 12/30/2023
 tags:
+  - programming
   - react
   - deno
   - fresh
 description: How and why I built my blog ... and you can too!
-coverAltText: "Note: Although this image is AI generated, the rest of this post is not."
+cover:
+  caption: "Note: Although this image is AI generated, the rest of this post is not."
 ---
 
 ## Motivation

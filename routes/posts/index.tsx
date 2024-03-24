@@ -2,18 +2,8 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { Post, postArray } from "../../utils/posts.ts";
 import { match } from "../../utils/helper.ts";
 import PostIndexForm from "../../islands/PostIndexForm.tsx";
-import PostTagLinks from "../../components/PostTagLinks.tsx";
-
-export const SORT_PARAM = "sort";
-
-export enum Sort {
-  NEWEST = "Newest",
-  OLDEST = "Oldest",
-}
-
-export enum Filter {
-  TAG = "tag",
-}
+import { Filter, Sort, SORT_PARAM } from "../../islands/PostIndexForm.tsx";
+import PostCard from "../../components/PostCard.tsx";
 
 const sorts = Object.values(Sort);
 
@@ -87,8 +77,8 @@ export const handler: Handlers<PostIndexData> = {
 export default (
   { data: { posts, currentSort, tags } }: PageProps<PostIndexData>,
 ) => (
-  <div class="w-full max-w-[min(65ch,calc(100%-2rem))]">
-    <div class="flex justify-between flex-col space-y-4 sm:space-y-0 sm:flex-row">
+  <div class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
+    <div class="flex justify-between flex-col space-y-[1rem] sm:flex-row sm:space-y-0">
       <h1 class="text-4xl font-bold">Posts</h1>
       <PostIndexForm
         sorts={sorts}
@@ -96,27 +86,8 @@ export default (
         tags={tags}
       />
     </div>
-    <br />
-    <div class="space-y-4">
-      {posts.map((post) => (
-        <div class="dark:bg-[#161B22] rounded-md border border-[#30363d] p-4">
-          <h2>
-            <a class="text-3xl" href={post.href}>{post.title}</a>
-          </h2>
-          <br />
-          <div class="flex space-x-4">
-            <span>{post.formattedDate}</span>
-            <span>{`${post.minutesToRead} minute read`}</span>
-            <span>
-              <PostTagLinks tags={post.tags} />
-            </span>
-          </div>
-          <br />
-          <p>{post.description}</p>
-          <br />
-          <a href={post.href}>Read more</a>
-        </div>
-      ))}
+    <div class="space-y-[1rem]">
+      {posts.map((post) => <PostCard {...post} />)}
     </div>
   </div>
 );
