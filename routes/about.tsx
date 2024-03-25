@@ -1,13 +1,13 @@
 import { asset, Head } from "$fresh/runtime.ts";
 import Markdown, { customRender } from "../components/Markdown.tsx";
-import { imageSize } from "image-size";
+// import { imageSize } from "image-size";
 
 const aboutMarkdown = await Deno.readTextFile("./static/about/me.md");
 
 const [aboutHtml] = customRender(aboutMarkdown);
 
 const headshotPath = "about/headshot.jpeg";
-const headshotDimensions = imageSize(`./static/${headshotPath}`);
+// const headshotDimensions = imageSize(`./static/${headshotPath}`);
 
 export default () => (
   <>
@@ -20,8 +20,8 @@ export default () => (
         src={asset(headshotPath)}
         alt="Profile picture"
         class="w-48 h-48 rounded-md"
-        width={headshotDimensions.width}
-        height={headshotDimensions.height}
+        // width={headshotDimensions.width}
+        // height={headshotDimensions.height}
       />
       <Markdown html={aboutHtml} />
     </div>
