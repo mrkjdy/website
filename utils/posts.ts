@@ -46,7 +46,7 @@ export type Post =
     headings: Heading[];
   };
 
-const createPost = (
+const _createPost = (
   postAttrs: PostAttributes,
   templateMarkdown: string,
   postBasename: string,
@@ -107,12 +107,12 @@ const createPost = (
   };
 };
 
-const POSTS_DIR_PATH = "./static/posts";
-const POST_FILE_NAME = "post.md";
+const _POSTS_DIR_PATH = "./static/posts";
+const _POST_FILE_NAME = "post.md";
 
 export const postMap = new Map<string, Post>();
 
-const extractYaml = createExtractor({ "yaml": parseYaml as Parser });
+const _extractYaml = createExtractor({ "yaml": parseYaml as Parser });
 
 // for await (const postDir of Deno.readDir(POSTS_DIR_PATH)) {
 //   if (!postDir.isDirectory) {
