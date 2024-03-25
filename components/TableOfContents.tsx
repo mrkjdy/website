@@ -1,8 +1,12 @@
-export type Heading = {
-  text: string;
-  level: number;
-  href: string;
-};
+import { z } from "$zod";
+
+export const headingSchema = z.object({
+  text: z.string(),
+  level: z.number(),
+  href: z.string(),
+});
+
+export type Heading = z.infer<typeof headingSchema>;
 
 type TableOfContentsProps = {
   headings: Heading[];

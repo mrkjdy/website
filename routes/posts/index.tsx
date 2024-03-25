@@ -1,9 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Post, postArray } from "../../utils/posts.ts";
+import { getPostArray, Post } from "../../utils/posts.ts";
 import { match } from "../../utils/helper.ts";
 import PostIndexForm from "../../islands/PostIndexForm.tsx";
 import { Filter, Sort, SORT_PARAM } from "../../islands/PostIndexForm.tsx";
 import PostCard from "../../components/PostCard.tsx";
+import { Head } from "$fresh/runtime.ts";
+import { TITLE } from "../_app.tsx";
 
 const sorts = Object.values(Sort);
 
@@ -14,8 +16,6 @@ const isLowerSort = (v: unknown): v is Lowercase<Sort> =>
 
 const DEFAULT_SORT = Sort.NEWEST;
 
-const allTags = new Set(postArray.map(({ tags }) => tags).flat());
-
 type PostIndexData = {
   posts: Post[];
   currentSort: Sort;
@@ -23,20 +23,22 @@ type PostIndexData = {
 };
 
 export const sortPosts = (postsToSort: Post[], sort: Sort): Post[] =>
-  match(sort, {
-    [Sort.NEWEST]: () =>
-      postsToSort.sort((postA, postB) =>
-        postB.date.valueOf() - postA.date.valueOf()
-      ),
-    [Sort.OLDEST]: () =>
-      postsToSort.sort((postA, postB) =>
-        postA.date.valueOf() - postB.date.valueOf()
-      ),
-  });
+  postsToSort.map((post) => ({ ...post, date: new Date(post.date) })).sort((
+    postA,
+    postB,
+  ) =>
+    match(sort, {
+      [Sort.NEWEST]: () => postB.date.valueOf() - postA.date.valueOf(),
+      [Sort.OLDEST]: () => postA.date.valueOf() - postB.date.valueOf(),
+    })
+  ).map((post) => ({ ...post, date: post.formattedDate }));
 
 export const handler: Handlers<PostIndexData> = {
-  GET: (req, ctx) => {
+  GET: async (req, ctx) => {
     const url = new URL(req.url);
+    // Get the posts
+    const posts = await getPostArray();
+    const allTags = new Set(posts.map(({ tags }) => tags).flat());
     // Filter the posts
     const passedTags = url.searchParams.getAll(Filter.TAG);
     const validTags = passedTags.filter((tag) => allTags.has(tag));
@@ -46,7 +48,7 @@ export const handler: Handlers<PostIndexData> = {
       return Response.redirect(url);
     }
     const tagsToShowMap = new Map<string, boolean>();
-    const postsToShow: Post[] = postArray.filter((post) =>
+    const postsToShow: Post[] = posts.filter((post) =>
       validTags.length <= 0 ||
       validTags.every((tag) => post.tags.includes(tag))
     );
@@ -77,17 +79,22 @@ export const handler: Handlers<PostIndexData> = {
 export default (
   { data: { posts, currentSort, tags } }: PageProps<PostIndexData>,
 ) => (
-  <div class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
-    <div class="flex justify-between flex-col space-y-[1rem] sm:flex-row sm:space-y-0">
-      <h1 class="text-4xl font-bold">Posts</h1>
-      <PostIndexForm
-        sorts={sorts}
-        currentSort={currentSort}
-        tags={tags}
-      />
+  <>
+    <Head>
+      <title key="title">{`${TITLE} | Posts`}</title>
+    </Head>
+    <div class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
+      <div class="flex justify-between flex-col space-y-[1rem] sm:flex-row sm:space-y-0">
+        <h1 class="text-4xl font-bold">Posts</h1>
+        <PostIndexForm
+          sorts={sorts}
+          currentSort={currentSort}
+          tags={tags}
+        />
+      </div>
+      <div class="space-y-[1rem]">
+        {posts.map((post) => <PostCard {...post} />)}
+      </div>
     </div>
-    <div class="space-y-[1rem]">
-      {posts.map((post) => <PostCard {...post} />)}
-    </div>
-  </div>
+  </>
 );

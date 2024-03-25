@@ -3,12 +3,14 @@ import Nav from "../islands/Nav.tsx";
 import { PageProps } from "$fresh/server.ts";
 import GoogleAnalyticsScripts from "../components/GoogleAnalyticsScripts.tsx";
 
+export const TITLE = "mrkjdy.dev";
+
 export default ({ Component }: PageProps) => (
   <html lang="en">
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title key="title">mrkjdy.dev</title>
+      <title key="title">{TITLE}</title>
       <link
         rel="icon"
         type="image/png"

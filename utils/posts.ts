@@ -1,11 +1,13 @@
 import { createExtractor } from "./markdown.ts";
 import { parse as parseYaml } from "$std/yaml/parse.ts";
 import { Parser } from "$std/front_matter/mod.ts";
-// import { customRender } from "../components/Markdown.tsx";
-import { Heading } from "../components/TableOfContents.tsx";
-// import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm.ts";
-// import { imageSize } from "image-size";
+import { customRender } from "../components/Markdown.tsx";
+import { Heading, headingSchema } from "../components/TableOfContents.tsx";
+import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm.ts";
+import { imageSize } from "image-size";
 import { z } from "$zod";
+import { basename, extname } from "$std/path/mod.ts";
+import { ensureFile } from "$std/fs/mod.ts";
 
 const postAttributesSchema = z.object({
   title: z.string(),
@@ -21,117 +23,129 @@ const postAttributesSchema = z.object({
 
 type PostAttributes = z.infer<typeof postAttributesSchema>;
 
-type PostImage = {
-  staticPath: string;
-  alt: string;
-  caption: string | undefined;
-  width: number | undefined;
-  height: number | undefined;
-};
+const postSchema = postAttributesSchema.and(z.object({
+  cover: z.object({
+    staticPath: z.string(),
+    width: z.number().optional(),
+    height: z.number().optional(),
+  }),
+  html: z.string(),
+  minutesToRead: z.number(),
+  href: z.string(),
+  formattedDate: z.string(),
+  headings: z.array(headingSchema),
+}));
 
-type OverwrittenPostAttributes = {
-  cover: PostImage;
-  date: Date;
-};
+export type Post = z.infer<typeof postSchema>;
 
-export type Post =
-  & Omit<PostAttributes, keyof OverwrittenPostAttributes>
-  & OverwrittenPostAttributes
-  & {
-    html: string;
-    minutesToRead: number;
-    href: string;
-    formattedDate: string;
-    markdown: string;
-    headings: Heading[];
+const createPost = (
+  postAttrs: PostAttributes,
+  templateMarkdown: string,
+  postBasename: string,
+): Post => {
+  const href = `/posts/${postBasename}`;
+  const html = customRender(templateMarkdown, {
+    assetPrefix: `${href}/`,
+  });
+  const numberOfWords = templateMarkdown.split(/\s+/).length;
+  const wordsPerMinute = 200;
+  const minutesToRead = Math.ceil(numberOfWords / wordsPerMinute);
+  const date = new Date(postAttrs.date);
+  const formattedDate = date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  const domParser = new DOMParser();
+  const dom = domParser.parseFromString(html, "text/html");
+  if (dom === null) {
+    throw new Error("Unable to create dom");
+  }
+  const headingElements = dom.querySelectorAll(
+    "h1, h2, h3, h4, h5, h6",
+  ) as unknown as NodeListOf<HTMLHeadingElement>;
+  const headings = [...headingElements].map((headingElement): Heading => {
+    const text = headingElement.textContent;
+    if (text === null) {
+      throw new Error("Missing text content in heading");
+    }
+    const level = Number.parseInt(headingElement.tagName.slice(1), 10);
+    const href = headingElement.querySelector("a")?.getAttribute("href");
+    if (typeof href !== "string") {
+      throw new Error("Missing href for heading element");
+    }
+    return { text, level, href };
+  });
+  const coverStaticPath = `/posts/${postBasename}/${postAttrs.cover.name}`;
+  const coverDimensions = imageSize(`./static${coverStaticPath}`);
+  return {
+    ...postAttrs,
+    cover: {
+      ...postAttrs.cover,
+      staticPath: coverStaticPath,
+      width: coverDimensions?.width,
+      height: coverDimensions?.height,
+    },
+    href,
+    html,
+    minutesToRead,
+    formattedDate,
+    headings,
   };
+};
 
-// const _createPost = (
-//   postAttrs: PostAttributes,
-//   templateMarkdown: string,
-//   postBasename: string,
-// ): Post => {
-//   const href = `/posts/${postBasename}`;
-//   const [html, markdown] = customRender(templateMarkdown, {
-//     assetPrefix: `${href}/`,
-//   });
-//   const numberOfWords = markdown.split(/\s+/).length;
-//   const wordsPerMinute = 200;
-//   const minutesToRead = Math.ceil(numberOfWords / wordsPerMinute);
-//   const date = new Date(postAttrs.date);
-//   const formattedDate = date.toLocaleDateString("en-US", {
-//     month: "long",
-//     day: "numeric",
-//     year: "numeric",
-//   });
-//   const domParser = new DOMParser();
-//   const dom = domParser.parseFromString(html, "text/html");
-//   if (dom === null) {
-//     throw new Error("Unable to create dom");
-//   }
-//   const headingElements = dom.querySelectorAll(
-//     "h1, h2, h3, h4, h5, h6",
-//   ) as unknown as NodeListOf<HTMLHeadingElement>;
-//   const headings = [...headingElements].map((headingElement): Heading => {
-//     const text = headingElement.textContent;
-//     if (text === null) {
-//       throw new Error("Missing text content in heading");
-//     }
-//     const level = Number.parseInt(headingElement.tagName.slice(1), 10);
-//     const href = headingElement.querySelector("a")?.getAttribute("href");
-//     if (typeof href !== "string") {
-//       throw new Error("Missing href for heading element");
-//     }
-//     return { text, level, href };
-//   });
-//   const coverStaticPath = `/posts/${postBasename}/${postAttrs.cover.name}`;
-//   const coverDimensions = imageSize(`./static${coverStaticPath}`);
-//   return {
-//     ...postAttrs,
-//     // Overwritten fields
-//     cover: {
-//       staticPath: coverStaticPath,
-//       alt: postAttrs.cover.alt,
-//       caption: postAttrs.cover.caption,
-//       width: coverDimensions?.width,
-//       height: coverDimensions?.height,
-//     },
-//     date,
-//     // Additional fields
-//     href,
-//     html,
-//     minutesToRead,
-//     formattedDate,
-//     markdown,
-//     headings,
-//   };
-// };
+const POSTS_DIR_PATH = "./static/posts";
+const POST_FILE_NAME = "post.md";
+const BUILT_POSTS_DIR_PATH = "./_posts";
 
-const _POSTS_DIR_PATH = "./static/posts";
-const _POST_FILE_NAME = "post.md";
+export const buildPosts = async () => {
+  const extractYaml = createExtractor({ "yaml": parseYaml as Parser });
+  for await (const postDir of Deno.readDir(POSTS_DIR_PATH)) {
+    if (!postDir.isDirectory) {
+      continue;
+    }
+    const postBasename = postDir.name;
+    for await (
+      const postFile of Deno.readDir(`${POSTS_DIR_PATH}/${postBasename}`)
+    ) {
+      if (postFile.name !== POST_FILE_NAME) {
+        continue;
+      }
+      const postFilePath =
+        `${POSTS_DIR_PATH}/${postBasename}/${POST_FILE_NAME}`;
+      const postContents = await Deno.readTextFile(postFilePath);
+      const { attrs, body: templateMarkdown } = extractYaml(postContents);
+      const postAttrs = postAttributesSchema.parse(attrs);
+      const post = createPost(postAttrs, templateMarkdown, postBasename);
+      const postOutputPath = `${BUILT_POSTS_DIR_PATH}/${postBasename}.json`;
+      await ensureFile(postOutputPath);
+      await Deno.writeTextFile(
+        postOutputPath,
+        JSON.stringify(post),
+      );
+    }
+  }
+};
 
-export const postMap = new Map<string, Post>();
+let postMap: Map<string, Post>;
 
-const _extractYaml = createExtractor({ "yaml": parseYaml as Parser });
+export const getPostMap = async (): Promise<Map<string, Post>> => {
+  if (postMap !== undefined) {
+    return postMap;
+  }
+  postMap = new Map();
+  // Load the pre-built posts into memory
+  for await (const builtPostDirEntry of Deno.readDir(BUILT_POSTS_DIR_PATH)) {
+    const { isFile, name: postFilename } = builtPostDirEntry;
+    if (isFile && postFilename.endsWith(".json")) {
+      const postJsonPath = `${BUILT_POSTS_DIR_PATH}/${postFilename}`;
+      const postJson = await Deno.readTextFile(postJsonPath);
+      const post = postSchema.parse(JSON.parse(postJson));
+      const postBasename = basename(postFilename, extname(postFilename));
+      postMap.set(postBasename, post);
+    }
+  }
+  return postMap;
+};
 
-// for await (const postDir of Deno.readDir(POSTS_DIR_PATH)) {
-//   if (!postDir.isDirectory) {
-//     continue;
-//   }
-//   const postBasename = postDir.name;
-//   for await (
-//     const postFile of Deno.readDir(`${POSTS_DIR_PATH}/${postBasename}`)
-//   ) {
-//     if (postFile.name !== POST_FILE_NAME) {
-//       continue;
-//     }
-//     const postFilePath = `${POSTS_DIR_PATH}/${postBasename}/${POST_FILE_NAME}`;
-//     const postContents = await Deno.readTextFile(postFilePath);
-//     const { attrs, body: templateMarkdown } = extractYaml(postContents);
-//     const postAttrs = postAttributesSchema.parse(attrs);
-//     const post = createPost(postAttrs, templateMarkdown, postBasename);
-//     postMap.set(postBasename, post);
-//   }
-// }
-
-export const postArray = [...postMap.values()];
+export const getPostArray = async () => [...(await getPostMap()).values()];

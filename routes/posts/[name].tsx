@@ -1,13 +1,15 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { asset, Head } from "$fresh/runtime.ts";
 import Markdown from "../../components/Markdown.tsx";
-import { Post, postMap } from "../../utils/posts.ts";
+import { getPostMap, Post } from "../../utils/posts.ts";
 import PostTagLinks from "../../components/PostTagLinks.tsx";
 import TableOfContents from "../../components/TableOfContents.tsx";
+import { TITLE } from "../_app.tsx";
 
 export const handler: Handlers<Post> = {
-  GET: (_, ctx) => {
+  GET: async (_, ctx) => {
     const { name } = ctx.params;
+    const postMap = await getPostMap();
     const post = postMap.get(name);
     if (post === undefined) {
       return ctx.renderNotFound();
@@ -28,6 +30,7 @@ Minutes to read: ${post.minutesToRead}`;
   return (
     <>
       <Head>
+        <title key="title">{`${TITLE} | ${post.title}`}</title>
         <meta name="description" content={metaDescription} />
       </Head>
       <article class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
