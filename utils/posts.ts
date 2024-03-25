@@ -114,24 +114,24 @@ export const postMap = new Map<string, Post>();
 
 const extractYaml = createExtractor({ "yaml": parseYaml as Parser });
 
-for await (const postDir of Deno.readDir(POSTS_DIR_PATH)) {
-  if (!postDir.isDirectory) {
-    continue;
-  }
-  const postBasename = postDir.name;
-  for await (
-    const postFile of Deno.readDir(`${POSTS_DIR_PATH}/${postBasename}`)
-  ) {
-    if (postFile.name !== POST_FILE_NAME) {
-      continue;
-    }
-    const postFilePath = `${POSTS_DIR_PATH}/${postBasename}/${POST_FILE_NAME}`;
-    const postContents = await Deno.readTextFile(postFilePath);
-    const { attrs, body: templateMarkdown } = extractYaml(postContents);
-    const postAttrs = postAttributesSchema.parse(attrs);
-    const post = createPost(postAttrs, templateMarkdown, postBasename);
-    postMap.set(postBasename, post);
-  }
-}
+// for await (const postDir of Deno.readDir(POSTS_DIR_PATH)) {
+//   if (!postDir.isDirectory) {
+//     continue;
+//   }
+//   const postBasename = postDir.name;
+//   for await (
+//     const postFile of Deno.readDir(`${POSTS_DIR_PATH}/${postBasename}`)
+//   ) {
+//     if (postFile.name !== POST_FILE_NAME) {
+//       continue;
+//     }
+//     const postFilePath = `${POSTS_DIR_PATH}/${postBasename}/${POST_FILE_NAME}`;
+//     const postContents = await Deno.readTextFile(postFilePath);
+//     const { attrs, body: templateMarkdown } = extractYaml(postContents);
+//     const postAttrs = postAttributesSchema.parse(attrs);
+//     const post = createPost(postAttrs, templateMarkdown, postBasename);
+//     postMap.set(postBasename, post);
+//   }
+// }
 
 export const postArray = [...postMap.values()];
