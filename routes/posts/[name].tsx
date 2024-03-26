@@ -36,16 +36,18 @@ Minutes to read: ${post.minutesToRead}`;
       </Head>
       <article class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
         <h1 class="text-4xl font-bold">{post.title}</h1>
-        <Picture
-          avifSrc={post.cover.avifSrc}
-          jpegSrc={post.cover.jpegSrc}
-          alt={post.cover.alt}
-          width={post.cover.width}
-          height={post.cover.height}
-        />
-        {post.cover.caption !== undefined && (
-          <p class="italic text-sm">{post.cover.caption}</p>
-        )}
+        <div class="flex flex-col space-y-[0.25rem]">
+          <Picture
+            avifSrc={post.cover.avifSrc}
+            jpegSrc={post.cover.jpegSrc}
+            alt={post.cover.alt}
+            width={post.cover.width}
+            height={post.cover.height}
+          />
+          {post.cover.caption !== undefined && (
+            <p class="italic text-sm">{post.cover.caption}</p>
+          )}
+        </div>
         <p class="flex space-x-4">
           <span>{post.formattedDate}</span>
           <span>{`${post.minutesToRead} minute read`}</span>

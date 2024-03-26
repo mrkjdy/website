@@ -8,7 +8,9 @@ tags:
   - fresh
 description: How and why I built my blog ... and you can too!
 cover:
-  caption: "Note: Although this image is AI generated, the rest of this post is not."
+  alt: An AI-generated picture of construction workers building a digital blog
+  caption: |
+    Note: Although this image is AI-generated, the rest of this post is not.
 ---
 
 ## Motivation

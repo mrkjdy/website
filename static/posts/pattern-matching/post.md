@@ -7,29 +7,30 @@ tags:
   - c
   - haskell
   - rust
-description: TODO
+description: |
+  An overview of Pattern Matching, with demos of why it's needed, and how you
+  can use it to write cleaner and safer code
 cover:
-  name: shape-sorter.webp
+  alt: An AI-generated picture of a shape sorter toy
+  caption: |
+    Note: Although this image is AI generated, the rest of this post is not.
 ---
 
-## What is pattern matching and why do I need it?
+## What is pattern matching?
 
-"Pattern matching is the act of checking a given sequence of tokens for the
-presence of the constituents of some pattern. In contrast to pattern
-recognition, the match usually has to be exact: "either it will or will not be a
-match."<sup> [source](https://en.wikipedia.org/wiki/Pattern_matching)</sup>
-
-It is a fundamental concept in computer science, often a fundamental part of
-functional programming syntax. Many modern programming languages have
-first-class support for pattern matching. Once you understand pattern matching
-you can use it to write code that is both clearer and safer than traditional
-imperative programming techniques.
+Pattern matching is a technique in programming that involves matching a value
+against a set of patterns to determine which branch or arm to execute. It is a
+fundamental concept in computer science, often a core part of functional
+programming syntax. It's expressive, often enabling you to match on a pattern
+and decompose complex values at the same time. Once you understand pattern
+matching, you can use it to write code that is both clearer and safer than
+traditional imperative programming techniques.
 
 ### Pitfalls of Imperative Programming Techniques
 
 To understand why pattern matching is needed, let's start with a simple example
-in C. Let's say you need a function that takes an array of structs representing
-shapes and returns the sum of all the shapes' areas.
+in C. Let's say you need a function that takes a shape and returns the area of
+the shape depending its type.
 
 We can create some types to represent our shapes like this:
 
@@ -198,9 +199,9 @@ There weren't any compile errors, everything should be fine right?
 
 Wrong. The C compiler will compile this without complaint. It will even run the
 program for you without throwing an error or
-[segfaulting](https://en.wikipedia.org/wiki/Segmentation_fault)! What's
-happening here is the worst kind of bug. Aside from manual validation, there's
-no indication that there is anything wrong.
+[segfaulting](https://en.wikipedia.org/wiki/Segmentation_fault)! This is the
+worst kind of bug. Aside from manual validation, there's no indication that
+there is anything wrong.
 
 The problem is that we forgot to include a branch to calculate the area of a
 parallelogram in `shape_area()`. The parallelogram is being treated as if it
@@ -242,9 +243,9 @@ Total area: 16.579133
 😮 The compiler is using our parallelogram dimensions as if they were triangle
 dimensions!
 
-What's happening is that the data for each object is stored in a contiguous
-memory block and when a dimension is read on a shape, the compiler just looks at
-the position in memory that the data should be in.
+The data for each object is stored in a contiguous memory block and when a
+dimension is read on a shape, the compiler just looks at the position in memory
+that the data should be in.
 
 In a large code base, this kind of problem can take ages to discover and hours
 to debug. If you're not careful and you don't test your code adequately, this
@@ -282,7 +283,8 @@ exiting with an error at runtime like this should be avoided. It can lead to
 system instability and can still be difficult to debug as the errors may only
 occur under certain conditions. Fixing the problem later in the development
 cycle can be more expensive as it may require additional deployments and
-validation. Ideally, this kind of problem should be caught as early as possible.
+validation. Ideally, this kind of problem should be caught as early as possible,
+i. e. at compile time.
 
 There's another problem, let's say our program needs to support many more
 shapes. The `if`/`else if`/`else` syntax can become a mess to read and maintain:
@@ -405,8 +407,8 @@ tend to inherit its syntax and imperative programming style, including
 
 As stated earlier, many modern programming languages have support for pattern
 matching. The checks we're looking for can be done at compile time rather than
-runtime. You should check if your favorite programming language has support for
-pattern matching so that you can avoid the pitfalls discussed above.
+at runtime. You should check if your favorite programming language has support
+for pattern matching so that you can avoid the pitfalls discussed above.
 
 ### Haskell
 
@@ -589,8 +591,8 @@ exhaustiveness checks enabled by default!
 
 This brings us to Rust! Its syntax is more of a happy medium between imperative
 programming and functional programming. It should be easier to read for
-imperative-brained developers while also offering the purity of functional
-programming. 😁
+imperative-brained developers while also offering the purity and safety of
+functional programming. 😁
 
 First, let's dip our toes in with the Fibonacci example from before:
 
@@ -737,8 +739,8 @@ error: could not compile `website` (bin "website") due to previous error
 Excellent! Not only did we get an error, but it was fatal, and it explained
 exactly what we need to do to fix it. Very nice.
 
-Maybe now you can understand some of the reasons why Rust is so difficult is
-that its syntax is a little weird and it has an entire set of checks that other
+Maybe now you can see that one of the reasons why Rust is so difficult is that
+its syntax is a little weird and it has an entire set of checks that other
 compilers don't do.
 
 ## What about TypeScript?
@@ -819,7 +821,7 @@ every shape type.
 
 My preferred option is to use
 [`ts-pattern`](https://www.npmjs.com/package/ts-pattern). It allows you to match
-on the structure and type of a variable in a much more nuanced way than a with a
+on the structure and type of a variable in a much more nuanced way than with a
 basic `switch`/`case`.
 
 Here's the re-written shapes example:
@@ -889,95 +891,62 @@ cases. You should probably add another .with(...) clause to match the
 missing case and prevent runtime errors.
 ```
 
+We can even get rid of the `type` property entirely, and just match on the
+structure of the shape passed to `match()`:
+
+```typescript
+import { match, P } from "npm:ts-pattern";
+
+type Circle = { r: number };
+
+type Rectangle = { w: number; h: number };
+
+type Triangle = { a: number; b: number; c: number };
+
+type Shape =
+  | Circle
+  | Rectangle
+  | Triangle;
+
+const shapeArea = (shape: Shape) =>
+  match(shape)
+    .with({ r: P.number }, ({ r }) => Math.PI * r * r)
+    .with({ w: P.number, h: P.number }, ({ w, h }) => w * h)
+    .with({ a: P.number, b: P.number, c: P.number }, ({ a, b, c }) => {
+      const s = (a + b + c) / 2;
+      return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+    })
+    .exhaustive();
+```
+
+Neat!
+
 `ts-pattern` supports a bunch of different ways to match and also comes with a
 few other useful utilities. Be sure to check out the
 [docs](https://github.com/gvergnaud/ts-pattern?tab=readme-ov-file#documentation)!
 
-<!-- ### A Simple Implementation
-
-```typescript
-type CompletePattern<O extends PropertyKey> = { [key in O]: () => unknown };
-
-type PartialPattern<O extends PropertyKey> = Partial<CompletePattern<O>> & {
-  _: () => unknown;
-};
-
-const match = <
-  O extends PropertyKey,
-  P extends CompletePattern<O> | PartialPattern<O>,
->(
-  option: O,
-  pattern: P,
-) =>
-  (pattern[option] ?? (pattern as PartialPattern<O>)._)() as P extends
-    { [Key in O]: () => infer R } ? R
-    : P extends { [Key in O]?: () => infer R } & { _: () => infer D } ? R | D
-    : never;
-```
-
-```typescript
-type TypeRecord<T, Opt extends PropertyKey> = T & Record<"type", Opt>;
-
-type CompleteObjectPattern<
-  T,
-  Opt extends PropertyKey,
-  Obj extends TypeRecord<T, Opt>,
-> = {
-  [Key in Obj["type"]]: Obj extends TypeRecord<T, Key> ? (obj: Obj) => unknown
-    : never;
-};
-
-type PartialObjectPattern<
-  T,
-  Opt extends PropertyKey,
-  Obj extends TypeRecord<T, Opt>,
-> =
-  & Partial<
-    CompleteObjectPattern<T, Opt, Obj>
-  >
-  & { _: (obj: Obj) => unknown };
-
-const matchObj = <
-  T,
-  Opt extends PropertyKey,
-  Obj extends TypeRecord<T, Opt>,
-  P extends
-    | CompleteObjectPattern<T, Opt, Obj>
-    | PartialObjectPattern<T, Opt, Obj>,
->(
-  obj: Obj,
-  pattern: P,
-) =>
-  (pattern[obj.type] ?? (pattern as PartialObjectPattern<T, Opt, Obj>)._)(
-    // deno-lint-ignore no-explicit-any
-    obj as any,
-  ) as P extends {
-    [Key in Obj["type"]]: Obj extends TypeRecord<T, Key> ? (obj: Obj) => infer R
-      : never;
-  } ? R
-    : P extends
-      & {
-        [Key in Obj["type"]]?: Obj extends TypeRecord<T, Key>
-          ? (obj: Obj) => infer R
-          : never;
-      }
-      & { _: (obj: Obj) => infer D } ? R | D
-    : never;
-``` -->
-
 ### TC39 Proposal
 
 TC39 is a Technical Committee working on the standard for JavaScript. They
-propose, review and approve new features for the language that later get
+propose, review, and approve new features for the language that later get
 implemented runtimes. There's a proposal for adding pattern matching to
 JavaScript itself. I highly recommend taking a look at
 [the proposal](https://github.com/tc39/proposal-pattern-matching).
 
 The proposal itself is still in its early stages, so it might be quite a while
-before we see first-class support in the wild.
+before we see first-class support in the wild. It also mentions adding
+exhaustiveness checks, which would be quite something, as JavaScript is not
+compiled!
 
 ## Conclusion
 
-Hopefully, through these examples, you've gained some insight into each of the
-languages I went over, and why I feel exhaustive pattern matching is an
-~~important~~ absolutely necessary modern programming feature.
+I hope that after reading through these examples you've gained some insight into
+the programming languages that I went over, and understand why exhaustive
+pattern matching is such an important modern programming technique. When
+maintaining a large code base, it can be impossible to remember every single
+piece of code that needs to be updated when modifying the types or structure of
+your data. Relying on the compiler to detect where there may be an issue makes
+the code easier to quickly and safely refactor. Understanding functional and
+modern programming techniques like this can help make your code clearer and
+safer even when you're not using a language like Rust that has these features
+built-in. Happy coding!

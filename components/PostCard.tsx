@@ -8,7 +8,7 @@ export default (post: Post) => (
       class="flex justify-between items-start space-x-[1rem]"
       href={post.href}
     >
-      <div class="flex flex-col space-y-[1rem]">
+      <div class="flex flex-col space-y-[1rem] max-w-[calc(100%-(20ch+1rem))]">
         <h2 class="text-3xl">{post.title}</h2>
         <p>{post.description}</p>
       </div>
