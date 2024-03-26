@@ -1,10 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { asset, Head } from "$fresh/runtime.ts";
+import { Head } from "$fresh/runtime.ts";
 import Markdown from "../../components/Markdown.tsx";
 import { getPostMap, Post } from "../../utils/posts.ts";
 import PostTagLinks from "../../components/PostTagLinks.tsx";
 import TableOfContents from "../../components/TableOfContents.tsx";
 import { TITLE } from "../_app.tsx";
+import Picture from "../../components/Picture.tsx";
 
 export const handler: Handlers<Post> = {
   GET: async (_, ctx) => {
@@ -35,11 +36,12 @@ Minutes to read: ${post.minutesToRead}`;
       </Head>
       <article class="w-full max-w-[min(65ch,calc(100%-2rem))] flex flex-col space-y-[1rem]">
         <h1 class="text-4xl font-bold">{post.title}</h1>
-        <img
-          src={asset(post.cover.staticPath)}
+        <Picture
+          avifSrc={post.cover.avifSrc}
+          jpegSrc={post.cover.jpegSrc}
           alt={post.cover.alt}
-          width={post.cover?.width}
-          height={post.cover?.height}
+          width={post.cover.width}
+          height={post.cover.height}
         />
         {post.cover.caption !== undefined && (
           <p class="italic text-sm">{post.cover.caption}</p>

@@ -20,7 +20,7 @@
     "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.1",
     "prismjs/": "https://esm.sh/prismjs@1.29.0/",
-    "image-size": "npm:image-size@1.1.1",
+    "sharp": "npm:sharp@0.33.3",
     "tailwindcss": "npm:tailwindcss@3.4.1",
     "tailwindcss/": "npm:/tailwindcss@3.4.1/",
     "tailwindcss/plugin": "npm:/tailwindcss@3.4.1/plugin.js"

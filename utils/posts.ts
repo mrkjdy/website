@@ -3,11 +3,14 @@ import { parse as parseYaml } from "$std/yaml/parse.ts";
 import { Parser } from "$std/front_matter/mod.ts";
 import { customRender } from "../components/Markdown.tsx";
 import { Heading, headingSchema } from "../components/TableOfContents.tsx";
-import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm.ts";
-import { imageSize } from "image-size";
+import {
+  DOMParser,
+  initParser,
+} from "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm-noinit.ts";
 import { z } from "$zod";
 import { basename, extname } from "$std/path/mod.ts";
 import { ensureFile } from "$std/fs/mod.ts";
+import sharp from "sharp";
 
 const postAttributesSchema = z.object({
   title: z.string(),
@@ -15,17 +18,17 @@ const postAttributesSchema = z.object({
   tags: z.array(z.string()),
   description: z.string(),
   cover: z.object({
-    name: z.string().default("cover.png"),
     alt: z.string().default("Cover"),
     caption: z.string().optional(),
-  }).default({ name: "cover.png", alt: "Cover" }),
+  }).default({ alt: "Cover" }),
 });
 
 type PostAttributes = z.infer<typeof postAttributesSchema>;
 
 const postSchema = postAttributesSchema.and(z.object({
   cover: z.object({
-    staticPath: z.string(),
+    avifSrc: z.string(),
+    jpegSrc: z.string(),
     width: z.number().optional(),
     height: z.number().optional(),
   }),
@@ -38,11 +41,11 @@ const postSchema = postAttributesSchema.and(z.object({
 
 export type Post = z.infer<typeof postSchema>;
 
-const createPost = (
+const createPost = async (
   postAttrs: PostAttributes,
   templateMarkdown: string,
   postBasename: string,
-): Post => {
+): Promise<Post> => {
   const href = `/posts/${postBasename}`;
   const html = customRender(templateMarkdown, {
     assetPrefix: `${href}/`,
@@ -76,15 +79,19 @@ const createPost = (
     }
     return { text, level, href };
   });
-  const coverStaticPath = `/posts/${postBasename}/${postAttrs.cover.name}`;
-  const coverDimensions = imageSize(`./static${coverStaticPath}`);
+  const coverAvifSrc = `/posts/${postBasename}/cover.avif`;
+  const coverJpegSrc = `/posts/${postBasename}/cover.jpeg`;
+  const { width: coverWidth, height: coverHeight } = await sharp(
+    `./static${coverAvifSrc}`,
+  ).metadata();
   return {
     ...postAttrs,
     cover: {
       ...postAttrs.cover,
-      staticPath: coverStaticPath,
-      width: coverDimensions?.width,
-      height: coverDimensions?.height,
+      avifSrc: coverAvifSrc,
+      jpegSrc: coverJpegSrc,
+      width: coverWidth,
+      height: coverHeight,
     },
     href,
     html,
@@ -100,6 +107,7 @@ const BUILT_POSTS_DIR_PATH = "./_posts";
 
 export const buildPosts = async () => {
   const extractYaml = createExtractor({ "yaml": parseYaml as Parser });
+  await initParser();
   for await (const postDir of Deno.readDir(POSTS_DIR_PATH)) {
     if (!postDir.isDirectory) {
       continue;
@@ -116,7 +124,7 @@ export const buildPosts = async () => {
       const postContents = await Deno.readTextFile(postFilePath);
       const { attrs, body: templateMarkdown } = extractYaml(postContents);
       const postAttrs = postAttributesSchema.parse(attrs);
-      const post = createPost(postAttrs, templateMarkdown, postBasename);
+      const post = await createPost(postAttrs, templateMarkdown, postBasename);
       const postOutputPath = `${BUILT_POSTS_DIR_PATH}/${postBasename}.json`;
       await ensureFile(postOutputPath);
       await Deno.writeTextFile(
