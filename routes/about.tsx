@@ -3,7 +3,6 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import Markdown, { customRender } from "../components/Markdown.tsx";
 import { TITLE } from "./_app.tsx";
 import Picture, { PictureProps } from "../components/Picture.tsx";
-import sharp from "sharp";
 
 type AboutData = {
   html: string;
@@ -19,17 +18,15 @@ export const handler: Handlers<AboutData> = {
       const html = customRender(markdown);
       const headshotAvifSrc = `/about/headshot.avif`;
       const headshotJpegSrc = `/about/headshot.jpeg`;
-      const { width: headshotWidth, height: headshotHeight } = await sharp(
-        `./static${headshotAvifSrc}`,
-      ).metadata();
       aboutData = {
         html,
         headshot: {
           avifSrc: headshotAvifSrc,
           jpegSrc: headshotJpegSrc,
           alt: "A picture of me",
-          width: headshotWidth,
-          height: headshotHeight,
+          // TODO - find a Deno Deploy compatible image sizer and resize images
+          width: 2319,
+          height: 2319,
         },
       };
     }

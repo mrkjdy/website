@@ -10,7 +10,6 @@ import {
 import { z } from "$zod";
 import { basename, extname } from "$std/path/mod.ts";
 import { ensureFile } from "$std/fs/mod.ts";
-import sharp from "sharp";
 
 const postAttributesSchema = z.object({
   title: z.string(),
@@ -67,20 +66,23 @@ const createPost = async (
   const headingElements = dom.querySelectorAll(
     "h1, h2, h3, h4, h5, h6",
   ) as unknown as NodeListOf<HTMLHeadingElement>;
-  const headings = [...headingElements].map((headingElement): Heading => {
-    const text = headingElement.textContent;
-    if (text === null) {
-      throw new Error("Missing text content in heading");
-    }
-    const level = Number.parseInt(headingElement.tagName.slice(1), 10);
-    const href = headingElement.querySelector("a")?.getAttribute("href");
-    if (typeof href !== "string") {
-      throw new Error("Missing href for heading element");
-    }
-    return { text, level, href };
-  });
+  const headings = Array.from(headingElements).map(
+    (headingElement): Heading => {
+      const text = headingElement.textContent;
+      if (text === null) {
+        throw new Error("Missing text content in heading");
+      }
+      const level = Number.parseInt(headingElement.tagName.slice(1), 10);
+      const href = headingElement.querySelector("a")?.getAttribute("href");
+      if (typeof href !== "string") {
+        throw new Error("Missing href for heading element");
+      }
+      return { text, level, href };
+    },
+  );
   const coverAvifSrc = `/posts/${postBasename}/cover.avif`;
   const coverJpegSrc = `/posts/${postBasename}/cover.jpeg`;
+  const { default: sharp } = await import("sharp");
   const { width: coverWidth, height: coverHeight } = await sharp(
     `./static${coverAvifSrc}`,
   ).metadata();
