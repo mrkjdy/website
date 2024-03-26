@@ -1,6 +1,6 @@
 ---
 title: Pattern Matching
-date: 3/22/2024
+date: 3/26/2024
 tags:
   - programming
   - typescript
