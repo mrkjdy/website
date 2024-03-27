@@ -1,4 +1,4 @@
-import { Filter } from "../routes/posts/index.tsx";
+import { Filter } from "../islands/PostIndexForm.tsx";
 
 type PostTagLinksProps = {
   tags: string[];

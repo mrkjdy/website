@@ -1,8 +1,12 @@
-export type Heading = {
-  text: string;
-  level: number;
-  href: string;
-};
+import { z } from "$zod";
+
+export const headingSchema = z.object({
+  text: z.string(),
+  level: z.number(),
+  href: z.string(),
+});
+
+export type Heading = z.infer<typeof headingSchema>;
 
 type TableOfContentsProps = {
   headings: Heading[];
@@ -10,7 +14,7 @@ type TableOfContentsProps = {
 
 export default ({ headings }: TableOfContentsProps) => (
   <nav aria-label="Table of Contents">
-    <h3 class="font-bold">Contents</h3>
+    <p class="font-bold">Contents</p>
     <ul class="list-disc list-inside">
       {headings.map((heading) => (
         <li>
