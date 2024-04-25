@@ -920,9 +920,7 @@ JavaScript itself. I highly recommend taking a look at
 [the proposal](https://github.com/tc39/proposal-pattern-matching).
 
 The proposal itself is still in its early stages, so it might be quite a while
-before we see first-class support in the wild. It also mentions adding
-exhaustiveness checks, which would be quite something, as JavaScript is not
-compiled!
+before we see first-class support in the wild.
 
 ## Conclusion
 
