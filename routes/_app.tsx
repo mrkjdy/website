@@ -33,7 +33,7 @@ export default ({ Component }: PageProps) => (
         </main>
         <footer class="w-full flex flex-row justify-center h-10 absolute bottom-0 text-gray-400">
           <p>
-            © 2023 Mark Judy
+            © {new Date().getFullYear()} Mark Judy
           </p>
         </footer>
       </div>

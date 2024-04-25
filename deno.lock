@@ -1718,6 +1718,7 @@
     "https://deno.land/x/hackle/init.ts": "https://deno.land/x/hackle@1.1.1/init.ts",
     "https://esm.sh/image-size": "https://esm.sh/image-size@1.1.1",
     "https://esm.sh/v135/@types/babel__helper-validator-identifier@^7/index.d.ts": "https://esm.sh/v135/@types/babel__helper-validator-identifier@7.15.2/index.d.ts",
+    "https://esm.sh/v135/@types/babel__helper-validator-identifier@~7/index.d.ts": "https://esm.sh/v135/@types/babel__helper-validator-identifier@7.15.2/index.d.ts",
     "https://esm.sh/v135/@types/he@~1.2/index.d.ts": "https://esm.sh/v135/@types/he@1.2.3/index.d.ts",
     "https://esm.sh/v135/@types/katex@~0.16/index.d.ts": "https://esm.sh/v135/@types/katex@0.16.7/index.d.ts",
     "https://esm.sh/v135/@types/marked@^5/index.d.ts": "https://esm.sh/v135/@types/marked@5.0.2/index.d.ts",
