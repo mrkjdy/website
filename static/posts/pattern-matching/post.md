@@ -91,7 +91,7 @@ We can also write a short program to test out our function:
 int main() {
   size_t size = 3;
   Shape shapes[size];
-  
+
   // Define the shapes
 
   // Area should be pi
@@ -153,7 +153,7 @@ typedef union {
 int main() {
   size_t size = 3;
   Shape shapes[size];
-  
+
   // Define the shapes
 
   // Area should be pi
@@ -467,9 +467,9 @@ main = do
 
 Also pretty short and sweet! You can see we have a data type called `Shape` with
 three different variants and corresponding dimensions. We also have a function
-called sumArea that takes a list of `Shape`s and calculates the sum using
-destructuring and recursion. Lastly, we have a main function, just like in C,
-that prints the total area.
+called shapeArea that takes a `Shape`, destructures its dimensions, and returns
+its area. Lastly, we have a main function, just like in C, that prints the total
+area.
 
 All without a single `if`/`else` or `switch`/`case` in sight. 😎
 
@@ -768,10 +768,7 @@ type Rectangle = { type: "rectangle"; w: number; h: number };
 
 type Triangle = { type: "triangle"; a: number; b: number; c: number };
 
-type Shape =
-  | Circle
-  | Rectangle
-  | Triangle;
+type Shape = Circle | Rectangle | Triangle;
 
 const shapeArea = (shape: Shape) => {
   switch (shape.type) {
@@ -798,11 +795,7 @@ time error via `assertNever()`:
 
 type Parallelogram = { type: "parallelogram"; a: number; b: number; t: number };
 
-type Shape =
-  | Circle
-  | Rectangle
-  | Triangle
-  | Parallelogram;
+type Shape = Circle | Rectangle | Triangle | Parallelogram;
 
 // ...
 ```
@@ -838,10 +831,7 @@ type Rectangle = { type: "rectangle"; w: number; h: number };
 
 type Triangle = { type: "triangle"; a: number; b: number; c: number };
 
-type Shape =
-  | Circle
-  | Rectangle
-  | Triangle;
+type Shape = Circle | Rectangle | Triangle;
 
 const shapeArea = (shape: Shape) =>
   match(shape)
@@ -863,11 +853,7 @@ And now if we add another Shape variant:
 
 type Parallelogram = { type: "parallelogram"; a: number; b: number; t: number };
 
-type Shape =
-  | Circle
-  | Rectangle
-  | Triangle
-  | Parallelogram;
+type Shape = Circle | Rectangle | Triangle | Parallelogram;
 
 // ...
 ```
@@ -906,10 +892,7 @@ type Rectangle = { w: number; h: number };
 
 type Triangle = { a: number; b: number; c: number };
 
-type Shape =
-  | Circle
-  | Rectangle
-  | Triangle;
+type Shape = Circle | Rectangle | Triangle;
 
 const shapeArea = (shape: Shape) =>
   match(shape)
