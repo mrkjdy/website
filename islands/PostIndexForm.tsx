@@ -2,7 +2,17 @@ import { useRef } from "preact/hooks";
 import Dropdown from "./Dropdown.tsx";
 import MultiSelect from "./MultiSelect.tsx";
 import IconX from "$tabler/icons/tsx/x.tsx";
-import { Filter, Sort, SORT_PARAM } from "../routes/posts/index.tsx";
+
+export const SORT_PARAM = "sort";
+
+export enum Sort {
+  NEWEST = "Newest",
+  OLDEST = "Oldest",
+}
+
+export enum Filter {
+  TAG = "tag",
+}
 
 type PostIndexMenuProps = {
   sorts: Sort[];

@@ -5,6 +5,7 @@
   "files.autoSave": "onWindowChange",
   "deno.unstable": false,
   "deno.importMap": "./deno.json",
+  "C_Cpp.formatting": "clangFormat",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
@@ -28,5 +29,8 @@
   },
   "markdown.extension.toc.orderedList": true,
   "deno.enable": true,
-  "deno.lint": true
+  "deno.lint": true,
+  "grammarly.files.include": [
+    "**/*.md"
+  ]
 }

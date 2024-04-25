@@ -1,4 +1,4 @@
-export { CSS, render, type RenderOptions } from "$gfm/mod.ts";
+export { CSS, render, type RenderOptions } from "gfm";
 
 import "prismjs/components/prism-python.js?no-check";
 import "prismjs/components/prism-rust.js?no-check";
