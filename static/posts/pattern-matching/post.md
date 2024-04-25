@@ -13,26 +13,29 @@ description: |
 cover:
   alt: An AI-generated picture of a shape sorter toy
   caption: |
-    Note: Although this image is AI generated, the rest of this post is not.
+    Note: Although this image is AI generated, the rest of this post is written
+    by me. (a human)
 ---
 
 ## What is pattern matching?
 
 Pattern matching is a technique in programming that involves matching a value
 against a set of patterns to determine which branch or arm to execute. It is a
-fundamental concept in computer science, often a core part of functional
-programming syntax. It's expressive, often enabling you to match on a pattern
-and decompose complex values at the same time. Once you understand pattern
-matching, you can use it to write code that is both clearer and safer than
-traditional imperative programming techniques.
+fundamental concept in computer science and often is a core part of functional
+programming syntax. It's expressive, often enabling you to match on the
+structure of some data while
+[destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+it at the same time. Once you understand pattern matching, you can use it to
+write code that is both clearer and safer than traditional imperative
+programming techniques.
 
 ### Pitfalls of Imperative Programming Techniques
 
 To understand why pattern matching is needed, let's start with a simple example
 in C. Let's say you need a function that takes a shape and returns the area of
-the shape depending its type.
+the shape depending on its type.
 
-We can create some types to represent our shapes like this:
+We can create a few types to represent our shapes like this:
 
 ```c
 // An enum for identifying the type of a shape
@@ -195,7 +198,7 @@ Total area: 16.579133
 ```
 
 Wait, that's not right... It should have printed 21.14... What's going on here?
-There weren't any compile errors, everything should be fine right?
+There weren't any compile errors, everything should be fine, right?
 
 Wrong. The C compiler will compile this without complaint. It will even run the
 program for you without throwing an error or
@@ -279,9 +282,9 @@ double shape_area(Shape shape) {
 ```
 
 But this is just a band-aid solution for our still-bleeding wound. Throwing or
-exiting with an error at runtime like this should be avoided. It can lead to
-system instability and can still be difficult to debug as the errors may only
-occur under certain conditions. Fixing the problem later in the development
+exiting with an error at runtime like this should be avoided because it can lead
+to system instability and can be difficult to debug as the errors may only occur
+under certain conditions. Also, fixing the problem later in the development
 cycle can be more expensive as it may require additional deployments and
 validation. Ideally, this kind of problem should be caught as early as possible,
 i. e. at compile time.
@@ -392,11 +395,11 @@ double shape_area(Shape shape) {
 ```
 
 However, I'd argue that it doesn't solve the main problem we're dealing with,
-and it gives you another way to shoot yourself in the foot: If you or someone
-else forgets to return or break in a case, then the calculations may be
-incorrect again, leading to another difficult-to-debug problem. So now, in each
-place where you may be processing shapes like this, you have to remember to add
-handlers when new shapes are added and always remember to return or break.
+and it gives you another way to shoot yourself in the foot. For example, if you
+or someone else forgets to return or break in a case, then the calculations may
+be incorrect again, leading to another difficult-to-debug problem. So now, in
+each place where you may be processing shapes like this, you have to remember to
+add handlers when new shapes are added and always remember to return or break.
 
 These problems aren't just limited to C.
 [Languages that descend from C](https://en.wikipedia.org/wiki/List_of_C-family_programming_languages)
@@ -417,7 +420,7 @@ programming languages.
 
 Pattern matching is how you define functions in Haskell. I believe this is one
 of the main reasons why people struggle with understanding Haskell, especially
-people who have only used imperative programming.
+those who have only used imperative programming.
 
 Here's a simple (unoptimized) example of a function for calculating the nth
 [Fibonacci](https://en.wikipedia.org/wiki/Fibonacci_sequence) number:
@@ -480,7 +483,7 @@ $ ./shape
 15.141593
 ```
 
-Nice.
+Nice, right?
 
 Let's try and add a new `Shape` just like before:
 
@@ -580,9 +583,9 @@ shape.hs:12:1: error: [-Wincomplete-patterns, -Werror=incomplete-patterns]
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
 ```
 
-Not ideal. But at least we have the option. Haskell has been around since 1990,
-this is probably just a result of the maintainers not wanting to introduce a
-breaking behavior into the compiler.
+That's not ideal. But at least we have the option. Haskell has been around since
+1990, this is probably just a result of the maintainers not wanting to introduce
+a breaking behavior into the compiler.
 
 There have been many new languages introduced since then, including some with
 exhaustiveness checks enabled by default!
@@ -736,7 +739,7 @@ For more information about this error, try `rustc --explain E0004`.
 error: could not compile `website` (bin "website") due to previous error
 ```
 
-Excellent! Not only did we get an error, but it was fatal, and it explained
+Excellent! Not only did we get an error, but it was fatal, and it explains
 exactly what we need to do to fix it. Very nice.
 
 Maybe now you can see that one of the reasons why Rust is so difficult is that
@@ -941,12 +944,14 @@ compiled!
 ## Conclusion
 
 I hope that after reading through these examples you've gained some insight into
-the programming languages that I went over, and understand why exhaustive
-pattern matching is such an important modern programming technique. When
-maintaining a large code base, it can be impossible to remember every single
-piece of code that needs to be updated when modifying the types or structure of
-your data. Relying on the compiler to detect where there may be an issue makes
-the code easier to quickly and safely refactor. Understanding functional and
-modern programming techniques like this can help make your code clearer and
-safer even when you're not using a language like Rust that has these features
-built-in. Happy coding!
+the programming languages that I discussed, and understand why pattern matching
+is such an important modern programming technique.
+
+When maintaining a large code base, it can be impossible to remember every
+single piece of code that needs to be updated when modifying the types or
+structure of your data. Relying on the compiler to detect where there may be an
+issue makes the code easier to quickly and safely refactor.
+
+Understanding functional and modern programming techniques like this can help
+make your code clearer and safer even when you're not using a language like Rust
+that has these features built-in. Happy coding!
