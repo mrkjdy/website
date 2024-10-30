@@ -25,7 +25,8 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[markdown]": {
-    "editor.rulers": [72, 80]
+    "editor.rulers": [72, 80],
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "markdown.extension.toc.orderedList": true,
   "deno.enable": true,
