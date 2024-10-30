@@ -1,7 +1,7 @@
-Hi, I'm Mark Judy. I work at IBM. I'm interested in software development and
-computers in general. In my free time I lift 🏋️‍♂️, play ultimate frisbee 🥏, cycle
-🚴‍♂️, and sometimes run 🏃‍♂️! My favorite programming languages are TypeScript,
-Rust, and Golang.
+Hi, I'm Mark Judy. I'm interested in software development and computers in
+general. In my free time I lift 🏋️‍♂️, play ultimate frisbee 🥏, cycle 🚲, and
+sometimes run 🏃‍♂️! My favorite programming languages are TypeScript, Rust, and
+Golang.
 
 Some of my favorite books include:
 
