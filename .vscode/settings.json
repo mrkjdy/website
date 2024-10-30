@@ -28,6 +28,10 @@
     "editor.rulers": [72, 80],
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
+  "[css]": {
+    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
   "markdown.extension.toc.orderedList": true,
   "deno.enable": true,
   "deno.lint": true,

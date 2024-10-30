@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans&family=IBM+Plex+Serif&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -48,7 +48,7 @@
   ::-webkit-scrollbar-thumb {
     background-color: rgb(55 65 81);
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgb(75 85 99);
   }
