@@ -40,7 +40,7 @@
     "npm:preact@10.19.3": "10.19.3",
     "npm:prismjs@^1.29.0": "1.29.0",
     "npm:sanitize-html@^2.13.0": "2.13.0",
-    "npm:sharp@~0.33.5": "0.33.5",
+    "npm:sharp@~0.33.3": "0.33.5",
     "npm:tailwindcss@3.3.5": "3.3.5_postcss@8.4.31",
     "npm:tailwindcss@3.4.14": "3.4.14_postcss@8.4.35",
     "npm:ts-pattern@*": "5.0.8"
@@ -3676,7 +3676,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@deno/gfm@0.10",
-      "npm:sharp@~0.33.5",
+      "npm:sharp@~0.33.3",
       "npm:tailwindcss@3.4.14"
     ]
   }
