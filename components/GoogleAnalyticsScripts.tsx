@@ -16,7 +16,7 @@ export default () => (
         <script
           dangerouslySetInnerHTML={{
             __html: `
-            window.dataLayer = window.dataLayer || [];
+            globalThis.dataLayer = globalThis.dataLayer || [];
             function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', '${GA_TRACKING_ID}');

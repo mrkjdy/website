@@ -33,7 +33,7 @@ export default () => {
   };
 
   useEffect(() => {
-    setCurrentPath(window.location.pathname);
+    setCurrentPath(globalThis.location.pathname);
   });
 
   const headerListItems = headerPairs.map(([title, href]) => (

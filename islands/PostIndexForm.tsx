@@ -39,9 +39,9 @@ export default ({ sorts, currentSort, tags }: PostIndexMenuProps) => {
           class="rounded-md border border-[#30363d] px-2 py-1 flex space-x-2 items-center"
           type="button"
           onClick={() => {
-            const url = new URL(window.location.href);
+            const url = new URL(globalThis.location.href);
             url.searchParams.delete(Filter.TAG);
-            window.location.assign(url);
+            globalThis.location.assign(url);
           }}
           aria-label="Clear Tags"
         >
