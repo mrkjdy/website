@@ -5,9 +5,14 @@
     "preview": "deno run -A main.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update"
   },
+  "deploy": {
+    "framework": "fresh",
+    "build": "deno task build"
+  },
   "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "imports": {
-    "$fresh/": "https://deno.land/x/fresh@1.6.8/",
+    "https://deno.land/x/hackle/init.ts": "./utils/hackle.ts",
+    "$fresh/": "https://deno.land/x/fresh@1.7.3/",
     "$fresh_seo": "https://deno.land/x/fresh_seo@1.0.1/mod.ts",
     "$ga/": "https://deno.land/x/g_a@0.1.2/",
     "$std/": "https://deno.land/std@0.210.0/",
@@ -27,5 +32,5 @@
   },
   "lint": { "rules": { "tags": ["fresh", "recommended"] } },
   "exclude": ["**/_fresh/*"],
-  "nodeModulesDir": true
+  "nodeModulesDir": "auto"
 }

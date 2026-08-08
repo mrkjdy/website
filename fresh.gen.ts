@@ -14,7 +14,7 @@ import * as $Dropdown from "./islands/Dropdown.tsx";
 import * as $MultiSelect from "./islands/MultiSelect.tsx";
 import * as $Nav from "./islands/Nav.tsx";
 import * as $PostIndexForm from "./islands/PostIndexForm.tsx";
-import { type Manifest } from "$fresh/server.ts";
+import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
