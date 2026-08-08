@@ -14,7 +14,6 @@
     "https://deno.land/x/hackle/init.ts": "./utils/hackle.ts",
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
     "$fresh_seo": "https://deno.land/x/fresh_seo@1.0.1/mod.ts",
-    "$ga/": "https://deno.land/x/g_a@0.1.2/",
     "$std/": "https://deno.land/std@0.210.0/",
     "$tabler/icons/": "https://deno.land/x/tabler_icons_tsx@0.0.6/",
     "$zod": "https://deno.land/x/zod@v3.16.1/mod.ts",
